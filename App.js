@@ -37,6 +37,12 @@ export default function App() {
 
 	return (
 		<View style={styles.container}>
+			<StatusBar
+		animated={true}
+        barStyle="default"
+        showHideTransition="none"
+        hidden={false}
+        />
 			{!currentUser ? <SignInScreen currentUser={currentUser} setcurrentUser={setcurrentUser} /> :
 				<GenericLayout currentUser={currentUser} setcurrentUser={setcurrentUser} />
 			}
@@ -47,6 +53,7 @@ export default function App() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		marginTop: "7%",
 		backgroundColor: '#fff',
 		alignItems: 'center',
 		justifyContent: 'center',
