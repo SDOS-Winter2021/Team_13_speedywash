@@ -2,11 +2,13 @@ import React, { useState } from 'react'
 import keys from "../../configs/KEYS"
 import { Text, View, StyleSheet, ScrollView, Button } from 'react-native'
 import Footer from '../Footer/Footer'
-
+import Header from '../Header/Header'
 import HomeScreen from '../HomeScreen/HomeScreen';
 import Subscriptions from '../Subscriptions/Subscriptions';
 import Profile from '../Profile/Profile';
-
+import Cart from '../Cart/Cart';
+import Notification from '../Notification/Notification';
+import ServiceSpecific from '../ServiceSpecific/ServiceSpecific'
 
 /* 
     * This is the stage selecter function
@@ -26,6 +28,12 @@ function SwitchView({ currentView, setcurrentView, currentUser, setcurrentUser }
             return <Subscriptions currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
         case keys.screens.PROFILE:
             return <Profile currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
+        case keys.screens.NOTIFICATION:
+            return <Notification currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
+        case keys.screens.CART:
+            return <Cart currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
+        case keys.screens.SERVICESPECIFIC:
+            return <ServiceSpecific currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
     }
 }
 
@@ -38,12 +46,19 @@ function SwitchView({ currentView, setcurrentView, currentUser, setcurrentUser }
 function GenericLayout({ currentUser, setcurrentUser }) {
     const [currentView, setcurrentView] = useState({
         screen: keys.screens.HOME,
+        header: true,
         footer: true
     })
 
     return (
         <View style={styles.main}>
-            <View style={currentView.footer ? styles.screen : {...styles.screen, flex: 1}} >
+            {
+                currentView.header &&
+                <View style={styles.header}>
+                    <Header currentView={currentView} setcurrentView={setcurrentView} />
+                </View>
+            }
+            <View style={currentView.footer || currentView.header? styles.screen : {...styles.screen, flex: 1}} >
                 <SwitchView currentView={currentView} setcurrentView={setcurrentView} currentUser={currentUser} setcurrentUser={setcurrentUser} />
             </View>
             {
@@ -63,13 +78,18 @@ const styles = StyleSheet.create({
         width: "100%",
         alignItems: "center"
     },
-    screen: {
-        flex: 0.95,
-        justifyContent: "center"
-    },
+    header: {
+        width: '100%',
+        flex: 0.09
+    },  
     footer: {
-        flex: 0.05,
-
+        width: '100%',
+        flex: 0.09,
+    },
+    screen: {
+        width: '100%',
+        flex: 0.82,
+        justifyContent: "center"
     }
 
 })

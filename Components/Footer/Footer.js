@@ -12,16 +12,16 @@ function Footer({ currentView, setcurrentView }) {
     return (
         <View style={styles.footerStyle}>
 
-            <TouchableOpacity style={styles.icons} onPress={()=>setcurrentView({screen: keys.screens.HOME, footer: true})} >
-                <FontAwesome5 name="home" size={32} color={currentView.screen==keys.screens.HOME ? keys.colors.SELECTED : keys.colors.MAIN} />
+            <TouchableOpacity style={styles.icons} onPress={()=>setcurrentView({screen: keys.screens.HOME, header: true, footer: true})} >
+                <FontAwesome5 name="home" size={32} color={currentView.screen==keys.screens.HOME ? keys.colors.FOOTER_SELECTED : keys.colors.FOOTER_NORMAL} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.icons} onPress={()=>setcurrentView({screen: keys.screens.SUBS, footer: true})}>
-                <MaterialIcons name="subscriptions" size={32} color={currentView.screen==keys.screens.SUBS ? keys.colors.SELECTED : keys.colors.MAIN}  />
+            <TouchableOpacity style={styles.icons} onPress={()=>setcurrentView({screen: keys.screens.SUBS, header: true, footer: true})}>
+                <MaterialIcons name="subscriptions" size={32} color={currentView.screen==keys.screens.SUBS ? keys.colors.FOOTER_SELECTED : keys.colors.FOOTER_NORMAL}  />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.icons} onPress={()=>setcurrentView({screen: keys.screens.PROFILE, footer: true})}>
-                <FontAwesome5 name="user-circle" size={32} color={currentView.screen==keys.screens.PROFILE ? keys.colors.SELECTED : keys.colors.MAIN}  />
+            <TouchableOpacity style={styles.icons} onPress={()=>setcurrentView({screen: keys.screens.PROFILE, header: true, footer: true})}>
+                <FontAwesome5 name="user-circle" size={32} color={currentView.screen==keys.screens.PROFILE ? keys.colors.FOOTER_SELECTED : keys.colors.FOOTER_NORMAL}  />
             </TouchableOpacity>
         </View>
     )
@@ -30,11 +30,13 @@ function Footer({ currentView, setcurrentView }) {
 const styles = StyleSheet.create({
     footerStyle: {
         // flex: 1,
+        height: '100%',
         flexDirection: "row",
-        justifyContent: "space-between",
+        backgroundColor: keys.colors.MAIN,
+        justifyContent: 'space-around'
     },
     icons: {
-        marginHorizontal: "10%"
+        alignSelf: 'center'
     }
 })
 

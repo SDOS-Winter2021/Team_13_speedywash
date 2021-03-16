@@ -5,12 +5,17 @@ const keys = {
     screens: {
         HOME: "home",
         SUBS: "subscription",
-        PROFILE: "profile"
+        PROFILE: "profile",
+        SERVICESPECIFIC: "serviceSpecific",
+        CART: "cart",
+        NOTIFICATION: "notification"
     },
     colors: {
-        SELECTED: "#2196F3",
-        MAIN: "#006BAD"
-        
+        HIGHLIGHT: "#2196F3",
+        MAIN: "#006BAD",
+        FOOTER_SELECTED: "#8c8c8c",
+        FOOTER_NORMAL: "#FFFFFF",
+        HOMEBACKGROUND: '#DCF2FD'
     }
 }
 
