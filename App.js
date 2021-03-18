@@ -31,7 +31,7 @@ export default function App() {
 	const [currentUser, setcurrentUser] = useState(null);
 
 	useEffect(() => {
-		// firebase.firestore().collection("homepage").doc("data").set(data);
+		firebase.firestore().collection("homepage").doc("data").set(data);
 		UpdateCurrentUser(setcurrentUser)
 	}, [])
 
