@@ -8,7 +8,7 @@ import Subscriptions from '../Subscriptions/Subscriptions';
 import Profile from '../Profile/Profile';
 import Cart from '../Cart/Cart';
 import Notification from '../Notification/Notification';
-import ServiceSpecific from '../ServiceSpecific/ServiceSpecific'
+// import ServiceSpecific from '../ServiceSpecific/ServiceSpecific'
 
 /* 
     * This is the stage selecter function
@@ -32,8 +32,8 @@ function SwitchView({ currentView, setcurrentView, currentUser, setcurrentUser }
             return <Notification currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
         case keys.screens.CART:
             return <Cart currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
-        case keys.screens.SERVICESPECIFIC:
-            return <ServiceSpecific currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
+        // case keys.screens.SERVICESPECIFIC:
+        //     return <ServiceSpecific currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
     }
 }
 

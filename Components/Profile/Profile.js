@@ -7,6 +7,7 @@ import { Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
+import { cleanCache } from "../../configs/CacheManager";
 
 
 function Temporary({ currentUser, setcurrentUser }) {
@@ -23,41 +24,75 @@ function Temporary({ currentUser, setcurrentUser }) {
         <Button title="Sign out" onPress={performSignout} />
     </View>
 }
-function AvatarCard({currentUser,setcurrentUser}){
+function AvatarCard({ currentUser, setcurrentUser }) {
     return (
-        <View style = {styles.card}>
+        <View style={styles.card}>
             <View>
-                <Text style = {styles.cardText}>
+                <Text style={styles.cardText}>
                     {currentUser.displayName}
                 </Text>
-                <Text style = {styles.cardText}>
-                {currentUser.phoneNumber}
+                <Text style={styles.cardText}>
+                    {currentUser.phoneNumber}
                 </Text>
             </View>
-            <Image resize Mode = "contain" style ={styles.cardImage} source = {require("../../assets/avatar.png")}/>
+            <Image resize Mode="contain" style={styles.cardImage} source={require("../../assets/avatar.png")} />
         </View>);
 }
-function Profile({currentUser, setcurrentUser}) {
+
+function Profile({ currentUser, setcurrentUser }) {
     function performSignout() {
         firebase.auth().signOut()
         AsyncStorage.removeItem(keys.storage.USER).then(() => {
             setcurrentUser(null);
         })
     }
-    const services=[
-        {id: "1", name:"Edit Profile"},
-        { id:"2", name:"Subscription" },
-        { id:"3", name:"My Orders" },
-        { id:"4", name:"Manage Address" },
+    const services = [
+        {
+            id: "1",
+            name: "Edit Profile",
+            action: () => { }
+        },
+        {
+            id: "2",
+            name: "Subscription",
+            action: () => { }
+        },
+        {
+            id: "3",
+            name: "My Orders",
+            action: () => { }
+        },
+        {
+            id: "4",
+            name: "Manage Address",
+            action: () => { }
+        },
+        {
+            id: "5",
+            name: "Sign Out",
+            action: () => {
+                firebase.auth().signOut()
+                AsyncStorage.removeItem(keys.storage.USER).then(() => {
+                    setcurrentUser(null);
+                })
+            }
+        },
+        {
+            id: "6",
+            name: "Clean Cache",
+            action: () => {
+                cleanCache();
+            }
+        }
     ];
 
     const _renderItem = (item) => {
-        return <View style={styles.serviceListItem}     
-        key={item.id}>
-            <TouchableOpacity 
-            // onPress = {()=>} // to be added
-            style={styles.listItemTouchable}>
-                <View style={{flex:0.6}}>
+        return <View style={styles.serviceListItem}
+            key={item.id}>
+            <TouchableOpacity
+                onPress = {()=>item.action()} // to be added
+                style={styles.listItemTouchable}>
+                <View style={{ flex: 0.6 }}>
                     <Text style={styles.ServiceNameStyle}>{item.name}</Text>
                 </View>
             </TouchableOpacity>
@@ -65,9 +100,9 @@ function Profile({currentUser, setcurrentUser}) {
     }
 
     return (
-        <View style = {styles.homeScreen}>
-            <AvatarCard currentUser ={currentUser} setcurrentUser={setcurrentUser} />
-            <SafeAreaView style={{flex:1, marginBottom: 15}}>
+        <View style={styles.homeScreen}>
+            <AvatarCard currentUser={currentUser} setcurrentUser={setcurrentUser} />
+            <SafeAreaView style={{ flex: 1, marginBottom: 15 }}>
                 {
                     services.map(_renderItem)
                 }
@@ -81,13 +116,13 @@ const styles = StyleSheet.create({
         flex: 1,
         width: '100%'
     },
-    card : {
+    card: {
         backgroundColor: "white",
         width: '92%',
         height: "25%",
         borderStyle: 'solid',
         borderWidth: 1,
-        
+
         marginHorizontal: '4%',
         marginVertical: '1.5%',
         borderRadius: 17,
@@ -97,7 +132,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: "space-evenly",
         alignItems: 'center'
-        
+
     },
     cardImage: {
         // alignSelf : 'flex-end',
@@ -106,9 +141,9 @@ const styles = StyleSheet.create({
         borderRadius: 150 / 2,
         overflow: "hidden",
         borderWidth: 3,
-        borderColor:  keys.colors.MAIN,
+        borderColor: keys.colors.MAIN,
     },
-    cardText : {
+    cardText: {
         textAlign: 'left',
         textAlignVertical: 'center',
         fontSize: 18,
@@ -116,16 +151,16 @@ const styles = StyleSheet.create({
         padding: "2%",
         marginHorizontal: "2%",
     },
-    serviceListItem : {
+    serviceListItem: {
         backgroundColor: 'white',
         width: '92%',
         height: undefined,
-        aspectRatio: 1/0.2,
+        aspectRatio: 1 / 0.2,
         marginHorizontal: '4%',
         marginVertical: '1.5%',
         borderRadius: 7
     },
-    listItemTouchable : {
+    listItemTouchable: {
         flexDirection: 'row',
         justifyContent: "space-evenly"
     },
@@ -138,11 +173,11 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         width: '92%',
         height: undefined,
-        aspectRatio: 1/0.2,
+        aspectRatio: 1 / 0.2,
         marginHorizontal: '4%',
         marginVertical: '1.5%',
         borderRadius: 7
     }
-    
+
 });
 export default Profile

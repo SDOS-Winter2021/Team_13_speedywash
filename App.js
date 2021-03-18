@@ -6,7 +6,7 @@ import SignInScreen from "./Components/Auth/SignInScreen";
 import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase';
 import 'firebase/firestore';
-import keys from "./configs/KEYS"
+import keys, { data } from "./configs/KEYS"
 import GenericLayout from './Components/GenericLayout/GenericLayout';
 
 /*
@@ -17,7 +17,7 @@ import GenericLayout from './Components/GenericLayout/GenericLayout';
 */
 function UpdateCurrentUser(setcurrentUser) {
 	AsyncStorage.getItem(keys.storage.USER).then(value => {
-		if(value!=null)
+		if (value != null)
 			setcurrentUser(JSON.parse(value));
 	});
 }
@@ -31,6 +31,7 @@ export default function App() {
 	const [currentUser, setcurrentUser] = useState(null);
 
 	useEffect(() => {
+		// firebase.firestore().collection("homepage").doc("data").set(data);
 		UpdateCurrentUser(setcurrentUser)
 	}, [])
 
@@ -38,11 +39,11 @@ export default function App() {
 	return (
 		<View style={styles.container}>
 			<StatusBar
-		animated={true}
-        barStyle="default"
-        showHideTransition="none"
-        hidden={false}
-        />
+				animated={true}
+				barStyle="default"
+				showHideTransition="none"
+				hidden={false}
+			/>
 			{!currentUser ? <SignInScreen currentUser={currentUser} setcurrentUser={setcurrentUser} /> :
 				<GenericLayout currentUser={currentUser} setcurrentUser={setcurrentUser} />
 			}
