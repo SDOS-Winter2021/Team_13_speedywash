@@ -15,7 +15,8 @@ const keys = {
         MAIN: "#006BAD",
         FOOTER_SELECTED: "#8c8c8c",
         FOOTER_NORMAL: "#FFFFFF",
-        HOMEBACKGROUND: '#DCF2FD'
+        HOMEBACKGROUND: '#DCF2FD',
+        AVATAR: '#A9CCE3'
     }
 }
 
