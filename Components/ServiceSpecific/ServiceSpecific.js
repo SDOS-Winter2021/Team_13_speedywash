@@ -11,7 +11,12 @@ function ServiceSpecific({ currentUser, setcurrentUser }) {
     };
     return (
         <View>
-            <ServiceItem heading={service.heading} list_of_titles={service.list_of_titles} list_of_items={service.list_of_items} list_of_prices={service.list_of_prices}></ServiceItem>
+            <ServiceItem 
+                heading={service.heading} 
+                list_of_titles={service.list_of_titles} 
+                list_of_items={service.list_of_items} 
+                list_of_prices={service.list_of_prices}>    
+            </ServiceItem>
         </View>
     )
 }
