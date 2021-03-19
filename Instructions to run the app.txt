@@ -1,0 +1,7 @@
+Setup an environment in your local machine to run a react native application.
+
+Instruction to run the app:
+1. Download the repository.
+2. In the directory of repository, open the command prompt.
+3. Type "npm install".
+4. Type "expo start".
