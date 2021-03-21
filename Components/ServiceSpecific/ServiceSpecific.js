@@ -1,7 +1,10 @@
 import React from 'react'
+import { ScrollView } from 'react-native';
 import { Button } from 'react-native';
-import { Text, View } from 'react-native'
+import { Text, View} from 'react-native'
 import ServiceItem from '../serviceitem';
+import styles from './styles';
+
 
 function ServiceSpecific({ data, serviceSelected, setServiceSelected, currentUser, setcurrentUser }) {
 
@@ -13,6 +16,7 @@ function ServiceSpecific({ data, serviceSelected, setServiceSelected, currentUse
         list_of_prices: [],
         list_of_units: [],
     };
+    // console.log(data)
     for(var i = 0;i<service.list_of_titles.length;i++)
     {
         var currTitle = service.list_of_titles[i]
@@ -30,13 +34,18 @@ function ServiceSpecific({ data, serviceSelected, setServiceSelected, currentUse
     }
     return (
         <View>
-            <Button title="Go Back" onPress={() => setServiceSelected(null)} />
+            <View style={styles.button}>
+            <Button title="Go Back" onPress={() => setServiceSelected(null)}  />
+            </View>
+           
+            <View style = {styles.scroll}>
             <ServiceItem
                 heading={service.heading}
                 list_of_titles={service.list_of_titles}
                 list_of_items={service.list_of_items}
                 list_of_prices={service.list_of_prices}>
             </ServiceItem>
+            </View>
         </View>
     )
 }
