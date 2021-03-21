@@ -2,7 +2,7 @@ import {StyleSheet,Dimensions} from 'react-native';
 const styles = StyleSheet.create({
     Container: {
         width:"95%",
-        height:"40%",
+        flex:1,
         flexDirection:'row',
         backgroundColor: '#fff',
         alignItems: 'center',
@@ -45,9 +45,13 @@ const styles = StyleSheet.create({
         // backgroundColor:"red"
       },
       type:{
-        width:"20%",
+        width:"30%",
         alignContent:"flex-end",
        
+      },
+      type2:{
+        width:"10%",
+        alignContent:"flex-end",
       },
       typetext:{
         fontWeight:'bold'
