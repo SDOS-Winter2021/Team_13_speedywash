@@ -3,9 +3,6 @@ import {View,Text, ImageBackground, Pressable,Image, ScrollView, TouchableOpacit
 import styles from './styles';
 import ServiceItemType from '../serviceitemtype';
 import {Transition, Transitioning} from 'react-native-reanimated';
-// import AccordionListItem from '../AccordionList/AccordionListItem.js';
-// import Footer from '../Footer/Footer.js';
-// import Header from '../header';
 const transition = (
     <Transition.Together>
         <Transition.In fade='fade' durationMs={200}></Transition.In>
@@ -20,15 +17,12 @@ const ServiceItem= (props) => {
     return(
         <Transitioning.View ref = {ref} transition={transition} style={styles.bigcontainer}>
             <ScrollView style={styles.bigcontainer} >
-            {/* <Header></Header> */}
+    
             <View style = {styles.headingbox}><Text style={styles.heading}>{heading}</Text></View>
-            {/* <View style = {styles.scrollbox}> */}
-            {/* <View style = {styles.scroll}> */}
+        
             
             {list_of_titles.map((item,key) => (<View key={key} style={styles.allitems}>
-                {/* <AccordionListItem title={item}> */}
-                    {/*  */}
-                    
+                
                     <TouchableOpacity key={key} onPress={()=>{setcurrentindex(key===currentindex?null:key)}}>
                     <View style={styles.textbox}><Text style={styles.text}>{item}</Text></View>
                         {key === currentindex && <View style={styles.items}>
@@ -37,15 +31,10 @@ const ServiceItem= (props) => {
                                 <ServiceItemType type={item1} price={list_of_prices[key][key1]}></ServiceItemType>
                                 </View>))}
                             </View>}
-                            {/* </AccordionListItem> */}
-                            {/* <Footer></Footer> */}
+                            
                         </TouchableOpacity>
                     </View> ))} 
-                    
-             {/* </View> */}
-            
-            
-            {/* </View> */}
+          
             </ScrollView>
         </Transitioning.View>
     );

@@ -3,7 +3,7 @@ const styles = StyleSheet.create({
     bigcontainer:{
         width:"100%",
         flex:3,
-        // marginTop:10,
+        
         alignContent:'center',
         backgroundColor:'rgba(243,246,216,1)'
     },
@@ -14,8 +14,7 @@ const styles = StyleSheet.create({
         alignContent:'center',
         alignItems:'center',
         padding:10
-        // marginBottom:20
-        // backgroundColor:'purple'
+        
         
     },
     heading:{
@@ -24,16 +23,6 @@ const styles = StyleSheet.create({
         color:'rgba(0,107,173,1)',
         fontWeight:'bold'
     },
-    Container: {
-        width:"100%",
-        flex:2,
-        flexDirection:'column',
-        // justifyContent:'space-between',
-        // alignItems:'center',
-        backgroundColor:'rgba(243,246,216,1)',
-        alignContent:'center',
-        alignSelf:'center'
-      },
       textbox:{
           width:"100%",
           flex:0.25,
@@ -51,35 +40,23 @@ const styles = StyleSheet.create({
       },
       items:{
           
-        //   backgroundColor:'red',
-        //   justifyContent:'space-around',
+        
           
       },
-      scroll:{
-          width:'100%',
-          flexGrow:1,
-          backgroundColor:'green'
-      },
-      scrollbox:{
-          width:'100%',
-          height:'100%',
-          backgroundColor:'yellow'
-      },
+     
       itembox:{
           alignItems:'center',
           justifyContent:'space-around',
           backgroundColor:'red'
       },
       touchable:{
-        //   alignItems:'center',
+    
           justifyContent:'space-around'
       },
       allitems:{
           justifyContent:'space-evenly'
       },
-      try:{
-          justifyContent:'space-evenly'
-      }
+     
     
       
 });
