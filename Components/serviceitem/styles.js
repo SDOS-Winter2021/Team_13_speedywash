@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
         flex:3,
         
         alignContent:'center',
-        backgroundColor:'rgba(243,246,216,1)'
+        // backgroundColor:'rgba(243,246,216,1)'
     },
     headingbox:{
         width:"100%",
@@ -21,21 +21,25 @@ const styles = StyleSheet.create({
         fontSize:30,
         // alignSelf:'center',
         color:'rgba(0,107,173,1)',
-        fontWeight:'bold'
+        // fontWeight:'bold'
     },
       textbox:{
-          width:"100%",
+          width:"80%",
           flex:0.25,
-          alignItems:'center',
+          alignItems:"center",
           justifyContent:'center',
-          backgroundColor:"rgba(255,218,164,1)",
+        //   backgroundColor:"rgba(255,218,164,1)",
           borderWidth:1,
-          borderColor:"black"
+          borderColor:"black",
+          padding: 10,
+          borderRadius: 50,
+          marginHorizontal: "10%",
+          marginVertical: "5%"          
       },
       text:{
         fontSize:20,
         color:'rgba(0,107,173,1)',
-        fontWeight:'bold',
+        // fontWeight:'bold',
         alignSelf:'center'
       },
       items:{
@@ -47,7 +51,7 @@ const styles = StyleSheet.create({
       itembox:{
           alignItems:'center',
           justifyContent:'space-around',
-          backgroundColor:'red'
+        //   backgroundColor:'red'
       },
       touchable:{
     
