@@ -15,7 +15,7 @@ const ServiceItemType= (props) => {
         </View>
 
         <View style={styles.type}><Text style={styles.typetext}>{type}</Text></View>
-        <View style={styles.type2}><Text style={styles.typetext}>{price} Rs./Qty</Text></View>
+        <View style={styles.type2}><Text style={styles.typetext}>{price}₹/Qty</Text></View>
         
         <View style = {styles.counter} >
             <TouchableOpacity onPress={()=>{setCount(count+1)}} style = {styles.button}>

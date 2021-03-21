@@ -36,12 +36,13 @@ const styles = StyleSheet.create({
           
       },
       counter:{
-        width:"30%",
+        width:70,
         flexDirection:'row',
-        height:"90%",
+        height:30,
         alignItems: 'center',
         justifyContent: 'center',
-        alignContent:"flex-end"
+        alignContent:"flex-end",
+        
         // backgroundColor:"red"
       },
       type:{
@@ -50,11 +51,11 @@ const styles = StyleSheet.create({
        
       },
       type2:{
-        width:"10%",
+        width:"20%",
         alignContent:"flex-end",
       },
       typetext:{
-        fontWeight:'bold'
+        // fontWeight:'bold'
       }
       ,
       buttontext:{
@@ -70,7 +71,8 @@ const styles = StyleSheet.create({
         alignItems:"center",
         // textAlignVertical:"center",
         alignSelf:'auto',
-        fontWeight:'bold'
+        // fontWeight:'bold',
+        borderRadius: 100
       }
       
     //   Titles:{
