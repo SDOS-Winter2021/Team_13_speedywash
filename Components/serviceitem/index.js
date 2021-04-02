@@ -28,7 +28,7 @@ const ServiceItem= (props) => {
                         {key === currentindex && <View style={styles.items}>
                             {list_of_items[key].map((item1,key1) => ( <View key ={key1} style={styles.itembox}>
                                 
-                                <ServiceItemType type={item1} price={list_of_prices[key][key1]}></ServiceItemType>
+                                <ServiceItemType heading={heading} title={item} type={item1} price={list_of_prices[key][key1]}></ServiceItemType>
                                 </View>))}
                             </View>}
                             
