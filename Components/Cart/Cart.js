@@ -9,8 +9,9 @@ function Cart({ currentView,setcurrentView,currentUser,setcurrentUser}) {
     const [data,setData] = useState(null);
     var vdata = {}
     const [total,setTotal] = useState(0);
+    const [didMount, setDidMount] = useState(false);
     useEffect(()=>{
-        let isMounted = true;
+        setDidMount(true);
         getValue(keys.storage.CART).then((value)=>{
             if(value==null){
                 setData(null);
@@ -22,9 +23,11 @@ function Cart({ currentView,setcurrentView,currentUser,setcurrentUser}) {
                
             }
         })
-        return ()=>{isMounted=false};
+        return ()=>{setDidMount(false);
+        }
     })
     useEffect(()=>{
+        setDidMount(true);
         if(data==null){
             setTotal(0);
         }
@@ -42,11 +45,16 @@ function Cart({ currentView,setcurrentView,currentUser,setcurrentUser}) {
                 }
                 setTotal(price)
         }
+        return ()=>{setDidMount(false)}
     },[data])
+    if(!didMount){
+        return null;
+    }
     return (
+        <View style={styles.bigcontainer}>
         <ScrollView style = {styles.container}>
            
-            <View>
+        
             <View style = {styles.allservices}>
             
             {data!=null && Object.keys(data).map((item,key)=>{return(<View key = {key} style={styles.services}>
@@ -61,13 +69,14 @@ function Cart({ currentView,setcurrentView,currentUser,setcurrentUser}) {
                 
             )})}
             
-            {data!=null &&<View style={styles.total}><Text style={styles.totaltext}>Total Amount is {total}</Text></View>}
+          
            
             {data==null &&<View><Text>CART IS EMPTY</Text></View>}
             </View>
            
-            </View>
         </ScrollView>
+        {data!=null &&<View style={styles.total}><Text style={styles.totaltext}>Total Amount is {total}</Text></View>}
+        </View>
     )
 }
 

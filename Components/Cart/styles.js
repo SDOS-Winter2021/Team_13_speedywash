@@ -1,9 +1,13 @@
 import {StyleSheet,Dimensions} from 'react-native';
 const styles = StyleSheet.create({
-    container:{
+    bigcontainer:{
         width:'100%',
         height:'100%',
-        backgroundColor:'red'
+    },
+    container:{
+        width:'100%',
+        // height:'90%',
+        // backgroundColor:'red',
     },
     services:{
         width:'100%',
@@ -12,18 +16,21 @@ const styles = StyleSheet.create({
     },
     allservices:{
         width:'100%',
-        height:'90%',
-        backgroundColor:'green'
+        height:'100%',
+        // backgroundColor:'green',
     },
     total:{
         width:'100%',
-        backgroundColor:'black',
-        height:'20%',
+        backgroundColor:'rgba(0,107,173,1)',
+        height:'10%',
         marginTop:'4%',
+        borderColor:'black',
+        borderWidth:2,
+        justifyContent:'center'
         
     },
     totaltext:{
-        fontSize:20,
+        fontSize:30,
         color:'white',
         alignSelf:'center'
     }

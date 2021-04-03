@@ -107,7 +107,7 @@ const ServiceItemType= (props) => {
                     
                     // console.warn("ITEM REMOVED FROM CART")
                 }
-                console.log(value);
+                // console.log(value);
                 if( value[heading][title][type].countitem==0){
                     delete(value[heading][title][type]);
                 }
@@ -117,7 +117,7 @@ const ServiceItemType= (props) => {
                 if(Object.keys(value[heading]).length==0){
                     delete(value[heading]);
                 }
-                console.log(value);
+                // console.log(value);
                 setValue(keys.storage.CART,value,keys.time.DAY).then((value1)=>{
                     
                     isactive = false
