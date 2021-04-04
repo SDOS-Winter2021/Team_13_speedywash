@@ -8,6 +8,9 @@ import Subscriptions from '../Subscriptions/Subscriptions';
 import Profile from '../Profile/Profile';
 import Cart from '../Cart/Cart';
 import Notification from '../Notification/Notification';
+import EditProfile from '../Profile/EditProfile'
+import ManageAddress from '../Profile/ManageAddress'
+import AddAddress from '../Profile/AddAddress'
 // import ServiceSpecific from '../ServiceSpecific/ServiceSpecific'
 
 /* 
@@ -32,6 +35,12 @@ function SwitchView({ currentView, setcurrentView, currentUser, setcurrentUser }
             return <Notification currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
         case keys.screens.CART:
             return <Cart currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
+        case keys.screens.EDITPROFILE:
+            return <EditProfile currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
+        case keys.screens.MANAGEADDRESS:
+            return <ManageAddress currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
+        case keys.screens.ADDADDRESS:
+            return <AddAddress currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
         // case keys.screens.SERVICESPECIFIC:
         //     return <ServiceSpecific currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
     }

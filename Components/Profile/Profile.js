@@ -24,33 +24,28 @@ function Temporary({ currentUser, setcurrentUser }) {
         <Button title="Sign out" onPress={performSignout} />
     </View>
 }
-function AvatarCard({ currentUser, setcurrentUser }) {
-    return (
-        <View style={styles.card}>
-            <View>
-                <Text style={styles.cardText}>
-                    {currentUser.displayName}
-                </Text>
-                <Text style={styles.cardText}>
-                    {currentUser.phoneNumber}
-                </Text>
-            </View>
-            <Image resize Mode="contain" style={styles.cardImage} source={require("../../assets/avatar.png")} />
-        </View>);
-}
 
-function Profile({ currentUser, setcurrentUser }) {
-    function performSignout() {
-        firebase.auth().signOut()
-        AsyncStorage.removeItem(keys.storage.USER).then(() => {
-            setcurrentUser(null);
-        })
+function Profile({ currentUser, setcurrentUser, setcurrentView}) {
+    function AvatarCard() {
+        return (
+            <View style={styles.card}>
+                <View>
+                    <Text style={styles.cardText}>
+                        {currentUser.displayName}
+                    </Text>
+                    <Text style={styles.cardText}>
+                        {currentUser.phoneNumber}
+                    </Text>
+                </View>
+                <Image resize Mode="contain" style={styles.cardImage} source={require("../../assets/avatar.png")} />
+            </View>);
     }
+    
     const services = [
         {
             id: "1",
             name: "Edit Profile",
-            action: () => { }
+            action: (onPress) => setcurrentView({screen: keys.screens.EDITPROFILE , header: true, footer:true})
         },
         {
             id: "2",
@@ -65,7 +60,7 @@ function Profile({ currentUser, setcurrentUser }) {
         {
             id: "4",
             name: "Manage Address",
-            action: () => { }
+            action: (onPress) => setcurrentView({screen: keys.screens.MANAGEADDRESS , header: true, footer:true})
         },
         {
             id: "5",
@@ -101,7 +96,7 @@ function Profile({ currentUser, setcurrentUser }) {
 
     return (
         <View style={styles.homeScreen}>
-            <AvatarCard currentUser={currentUser} setcurrentUser={setcurrentUser} />
+            <AvatarCard/>
             <SafeAreaView style={{ flex: 1, marginBottom: 15 }}>
                 {
                     services.map(_renderItem)

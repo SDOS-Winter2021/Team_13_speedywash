@@ -10,7 +10,10 @@ const keys = {
 		PROFILE: "profile",
 		SERVICESPECIFIC: "serviceSpecific",
 		CART: "cart",
-		NOTIFICATION: "notification"
+		NOTIFICATION: "notification",
+		EDITPROFILE: "editprofile",
+		MANAGEADDRESS: "manageaddress",
+		ADDADDRESS: "addAddress"
 	},
 	colors: {
 		HIGHLIGHT: "#2196F3",
