@@ -10,7 +10,10 @@ export function getValue(key) {
         AsyncStorage.getItem(key).then((value) => {
             if (value == null)
                 resolve(null);
+            
             value = JSON.parse(value)
+            
+            
             if (value.timeout < (new Date()).getTime())
                 resolve(null);
             else

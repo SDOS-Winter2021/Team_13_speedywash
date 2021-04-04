@@ -1,7 +1,8 @@
 const keys = {
 	storage: {
 		USER: "speedywash:user",
-		HOMEPAGE_DATA: "speedywash:homepage-data"
+		HOMEPAGE_DATA: "speedywash:homepage-data",
+		CART:"speedywash:cart"
 	},
 	screens: {
 		HOME: "home",
