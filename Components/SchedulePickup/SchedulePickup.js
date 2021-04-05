@@ -24,6 +24,7 @@ function TimePickerList({ time, setTime }) {
 
 function AddressPicker({ currentUser, address, setAddress }) {
     const Slots = ["home", "office", "other"]
+    console.log(currentUser)
     return <View>
         <Picker style={styles.picker} mode="dropdown" selectedValue={address} onValueChange={(itemValue) => {
             if (currentUser[itemValue] == "") {
@@ -34,7 +35,7 @@ function AddressPicker({ currentUser, address, setAddress }) {
         }}>
             {Slots.map((item) => <Picker.Item key={item} label={item} value={item} />)}
         </Picker>
-        <TextInput style={{textAlign: 'center'}} disabled={true} value={currentUser[address]}/>
+        <TextInput style={{textAlign: 'center', fontSize: 15}} disabled={true} value={currentUser[address]}/>
     </View>
 
 
@@ -44,7 +45,6 @@ function SchedulePickup({ currentUser, data }) {
     const [date, setDate] = useState(null)
     const [time, setTime] = useState("4 - 5 PM")
     const [address, setAddress] = useState("home")
-    console.log(date, time, setDate, setTime)
     const maxDate = new Date(new Date().setDate(new Date().getDate() + 7))
     const [pickDate, setPickDate] = useState(false);
 
