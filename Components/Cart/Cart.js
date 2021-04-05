@@ -1,7 +1,7 @@
 import { stopLocationUpdatesAsync } from 'expo-location';
 import React, { useEffect, useState } from 'react'
 import { Text, View, ScrollView, TouchableOpacity } from 'react-native'
-import { getValue, setValue } from '../../configs/CacheManager'
+import { getValue, setValue, removeValue } from '../../configs/CacheManager'
 import keys from '../../configs/KEYS'
 import ServiceSpecific from '../ServiceSpecific/ServiceSpecific.js';
 import styles from './styles.js';
@@ -15,6 +15,12 @@ function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
     const [time, setTime] = useState("4 - 5 PM")
     useEffect(() => {
         getValue(keys.storage.CART).then((data) => {
+            if (data != null && Object.keys(data).length == 0) {
+                removeValue(keys.storage.CART)
+                setData(null)
+                setTotal(0)
+                return;
+            }
             if (data !== null) {
                 list_of_headings = Object.keys(data)
                 var price = 0
