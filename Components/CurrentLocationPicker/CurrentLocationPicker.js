@@ -37,6 +37,7 @@ function CurrentLocationPicker({ setLocation, setNumericalLocationObject }) {
                                     .then((localeData) => {
                                         console.log(localeData[0])
                                         setLocation(localeData[0])
+                                        setClicked(false)
                                     })
                                     .catch((err) => {
                                         Alert("Error", `${err}`)

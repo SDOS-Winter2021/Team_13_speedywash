@@ -9,9 +9,12 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-community/async-storage';
 import { getValue } from "../../configs/CacheManager"
-
+import CurrentLocationPicker from "../CurrentLocationPicker/CurrentLocationPicker"
 import { Alert } from 'react-native';
 
+function parseLocation(location) {
+    return `${location.name == null ? '' : location.name} ${location.steet == null ? '' : location.street} ${location.district == null ? '' : location.district} ${location.city == null ? '' : location.city} ${location.postalCode == null ? '' : location.postalCode} ${location.subregion == null ? '' : location.subregion} ${location.region == null ? '' : location.region} ${location.country == null ? '' : location.country}`
+}
 
 function AddressUpdater({ currentAddresses, selectedAddress, setSelectedAddress }) {
     const slots = ["home", "office", "other"]
@@ -29,6 +32,8 @@ function ManageAddress({ currentUser, setcurrentUser, setcurrentView }) {
         other: currentUser.other
     })
     const [selectedAddress, setSelectedAddress] = useState("home");
+    const [location, setlocation] = useState(null)
+    const [numericalLocationObject, setNumericalLocationObject] = useState(null)
     // const addressList = [
     //     {
     //         id: "1",
@@ -107,6 +112,17 @@ function ManageAddress({ currentUser, setcurrentUser, setcurrentView }) {
         })
     }
 
+    function LiveLocationSetter(newLocation){
+        if(newLocation!=null)
+        {
+            setlocation(newLocation)
+            setcurrentAddresses((prev)=>({
+                ...prev,
+                [selectedAddress]: parseLocation(newLocation)
+            }))
+        }
+    }
+
     return (
         <View style={styles.homeScreen}>
             {/* <Text
@@ -135,6 +151,7 @@ function ManageAddress({ currentUser, setcurrentUser, setcurrentView }) {
                     value={currentAddresses[selectedAddress]}
                     onChangeText={(text) => setcurrentAddresses((prev) => ({ ...prev, [selectedAddress]: text }))}
                     multiline={true} />
+                <CurrentLocationPicker setLocation={LiveLocationSetter} setNumericalLocationObject={setNumericalLocationObject} />
 
                 <View style={styles.ButtonView}>
                     <Button title={"Update"} onPress={updateAddress} />
@@ -153,6 +170,7 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     subView: {
+        textAlign: 'center',
         margin: 20,
     },
     addressField: {
