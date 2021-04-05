@@ -11,8 +11,6 @@ function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
     var vdata = {}
     const [total, setTotal] = useState(0);
     const [proceed, setProceed] = useState(false);
-    const [date, setDate] = useState(null)
-    const [time, setTime] = useState("4 - 5 PM")
     useEffect(() => {
         console.log("useEffect")
         getValue(keys.storage.CART).then((gotData) => {
@@ -42,7 +40,7 @@ function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
     console.log("Banana")
     return (
         proceed == true ?
-            <View><SchedulePickup date={date} time={time} setDate={setDate} setTime={setTime} /></View> :
+            <View><SchedulePickup currentUser={currentUser} data={data} /></View> :
             <View style={styles.bigcontainer}>
                 <ScrollView style={styles.container}>
                     <View style={styles.allservices}>
