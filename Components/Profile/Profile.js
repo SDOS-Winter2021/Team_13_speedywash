@@ -25,7 +25,7 @@ function Temporary({ currentUser, setcurrentUser }) {
     </View>
 }
 
-function Profile({ currentUser, setcurrentUser, setcurrentView}) {
+function Profile({ currentUser, setcurrentUser, setcurrentView }) {
     function AvatarCard() {
         return (
             <View style={styles.card}>
@@ -37,15 +37,15 @@ function Profile({ currentUser, setcurrentUser, setcurrentView}) {
                         {currentUser.phoneNumber}
                     </Text>
                 </View>
-                <Image resize Mode="contain" style={styles.cardImage} source={require("../../assets/avatar.png")} />
+                {currentUser.photoURL == "" ? <Image resize Mode="contain" style={styles.cardImage} source={require("../../assets/avatar.png")} /> : <Image resize Mode="contain" style={styles.cardImage} source={{ uri: currentUser.photoURL }} />}
             </View>);
     }
-    
+
     const services = [
         {
             id: "1",
             name: "Edit Profile",
-            action: (onPress) => setcurrentView({screen: keys.screens.EDITPROFILE , header: true, footer:true})
+            action: (onPress) => setcurrentView({ screen: keys.screens.EDITPROFILE, header: true, footer: true })
         },
         {
             id: "2",
@@ -60,7 +60,7 @@ function Profile({ currentUser, setcurrentUser, setcurrentView}) {
         {
             id: "4",
             name: "Manage Address",
-            action: (onPress) => setcurrentView({screen: keys.screens.MANAGEADDRESS , header: true, footer:true})
+            action: (onPress) => setcurrentView({ screen: keys.screens.MANAGEADDRESS, header: true, footer: true })
         },
         {
             id: "5",
@@ -85,7 +85,7 @@ function Profile({ currentUser, setcurrentUser, setcurrentView}) {
         return <View style={styles.serviceListItem}
             key={item.id}>
             <TouchableOpacity
-                onPress = {()=>item.action()} // to be added
+                onPress={() => item.action()} // to be added
                 style={styles.listItemTouchable}>
                 <View style={{ flex: 0.6 }}>
                     <Text style={styles.ServiceNameStyle}>{item.name}</Text>
@@ -96,7 +96,7 @@ function Profile({ currentUser, setcurrentUser, setcurrentView}) {
 
     return (
         <View style={styles.homeScreen}>
-            <AvatarCard/>
+            <AvatarCard />
             <SafeAreaView style={{ flex: 1, marginBottom: 15 }}>
                 {
                     services.map(_renderItem)
