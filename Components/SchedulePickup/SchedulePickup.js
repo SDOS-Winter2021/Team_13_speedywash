@@ -20,6 +20,7 @@ function TimePickerList({ time, setTime }) {
 }
 
 function SchedulePickup({ date, time, setDate, setTime }) {
+    console.log(date, time, setDate, setTime)
     const maxDate = new Date(new Date().setDate(new Date().getDate() + 7))
     const [pickDate, setPickDate] = useState(false);
 

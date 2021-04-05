@@ -14,30 +14,32 @@ function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
     const [date, setDate] = useState(null)
     const [time, setTime] = useState("4 - 5 PM")
     useEffect(() => {
-        getValue(keys.storage.CART).then((data) => {
-            if (data != null && Object.keys(data).length == 0) {
+        console.log("useEffect")
+        getValue(keys.storage.CART).then((gotData) => {
+            if (gotData != null && Object.keys(gotData).length == 0) {
                 removeValue(keys.storage.CART)
                 setData(null)
                 setTotal(0)
                 return;
             }
-            if (data !== null) {
-                list_of_headings = Object.keys(data)
+            if (gotData !== null) {
+                list_of_headings = Object.keys(gotData)
                 var price = 0
                 for (i = 0; i < list_of_headings.length; i++) {
-                    list_of_titles = Object.keys(data[list_of_headings[i]])
+                    list_of_titles = Object.keys(gotData[list_of_headings[i]])
                     for (j = 0; j < list_of_titles.length; j++) {
-                        list_of_types = Object.keys(data[list_of_headings[i]][list_of_titles[j]])
+                        list_of_types = Object.keys(gotData[list_of_headings[i]][list_of_titles[j]])
                         for (k = 0; k < list_of_types.length; k++) {
-                            price += data[list_of_headings[i]][list_of_titles[j]][list_of_types[k]].countitem * data[list_of_headings[i]][list_of_titles[j]][list_of_types[k]].price;
+                            price += gotData[list_of_headings[i]][list_of_titles[j]][list_of_types[k]].countitem * gotData[list_of_headings[i]][list_of_titles[j]][list_of_types[k]].price;
                         }
                     }
                 }
-                setData(data)
+                setData(gotData)
                 setTotal(price)
             }
         })
-    }, [data])
+    }, [])
+    console.log("Banana")
     return (
         proceed == true ?
             <View><SchedulePickup date={date} time={time} setDate={setDate} setTime={setTime} /></View> :
