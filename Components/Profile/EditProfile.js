@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, View, Button, TextInput } from 'react-native'
 import keys from "../../configs/KEYS"
 import AsyncStorage from '@react-native-community/async-storage';
@@ -9,39 +9,50 @@ import { TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { setValue } from "../../configs/CacheManager";
 
-function EditProfile({ currentUser, setcurrentUser,setcurrentView }) {
-    
-    const [avatarName,setavatarname] = useState(currentUser.displayName);
+function EditProfile({ currentUser, setcurrentUser, setcurrentView }) {
+
+    const [avatarName, setavatarname] = useState(currentUser.displayName);
     const [userDetails, setUserDetails] = useState({
-        name:  currentUser.displayName,
+        name: currentUser.displayName,
         email: currentUser.email
     });
     // const [img,setImg] = useState(currentUser.photoURL == "" ? require("../../assets/avatar.png") : currentUser.photoURL);
-    const [img,setImg] = useState("../../assets/avatar.png");
-    const [isPicked,setPicked] =  useState(false);
-    
-    const pickImage=()=>{
-        console.log('pick image called');
-        ImagePicker.requestMediaLibraryPermissionsAsync().then((status)=>{
-            console.log(status)
-            if(status.granted){
-                console.log('2');
+    const [img, setImg] = useState(currentUser.photoURL == "" ? "../../assets/avatar.png" : currentUser.photoURL);
+    const [isPicked, setPicked] = useState(currentUser.photoURL == "" ? false : true);
+
+    const pickImage = () => {
+        ImagePicker.requestMediaLibraryPermissionsAsync().then((status) => {
+            if (status.granted) {
                 ImagePicker.launchImageLibraryAsync({
-                    mediaTypes: ImagePicker.MediaTypeOptions.All,
+                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
                     allowsEditing: true,
-                    aspect:[4,3],
-                    quality:1
-                }).then((result)=>{
-                    console.log('3');
-                    if(!result.cancelled){
+                    aspect: [4, 3],
+                    quality: 1
+                }).then((result) => {
+                    if (!result.cancelled) {
                         setImg(result.uri)
+                        fetch(result.uri).then((response) => {
+                            response.blob().then((blob) => {
+                                let ref = firebase.storage().ref().child(`profile/${currentUser.uid}`)
+                                ref.put(blob).then(() => {
+                                    firebase.storage().ref(`profile/${currentUser.uid}`).getDownloadURL().then((url) => {
+                                        firebase.firestore().collection("users").doc(currentUser.uid)
+                                            .update({ photoURL: url })
+                                            .then(() => {
+                                                Alert.alert("Success", "Image Uploaded Successfully")
+                                                setcurrentUser({ ...currentUser, photoURL: url })
+                                            })
+                                    })
+                                })
+                            })
+                        })
                         setPicked(true);
                     }
                 })
             }
-        });   
+        });
     }
-    function handleName(text){
+    function handleName(text) {
         setUserDetails(prevValue => {
             return {
                 name: text,
@@ -49,30 +60,28 @@ function EditProfile({ currentUser, setcurrentUser,setcurrentView }) {
             };
         });
     }
-    function handleEmail(text){
+    function handleEmail(text) {
         setUserDetails(prevValue => {
             return {
                 name: prevValue.name,
                 email: text
             };
         });
-        
+
     }
-    function handleUpdates(){
+    function handleUpdates() {
         const newObj = {
-            ...currentUser,
-            "displayName" : userDetails.name,
-            "email" : userDetails.email,
-            
+            "displayName": userDetails.name,
+            "email": userDetails.email,
         }
         firebase.firestore().collection("users").doc(currentUser.uid).update(newObj).then(() => {
-            setcurrentUser(newObj)
-            setValue(keys.storage.USER,newObj,keys.time.WEEK)
+            setcurrentUser({ ...currentUser, newObj })
+            setValue(keys.storage.USER, { ...currentUser, newObj }, keys.time.WEEK)
         });
         setavatarname(userDetails.name);
-        Alert.alert("Details updated")    
+        Alert.alert("Details updated")
     }
-
+    // console.log(img)
     function AvatarCard() {
         return (
             <View style={styles.card}>
@@ -88,8 +97,8 @@ function EditProfile({ currentUser, setcurrentUser,setcurrentView }) {
                 {/* <Image resize Mode="contain" style={styles.cardImage} source={
                     {uri: currentUser.photoURL == "" ? require("../../assets/avatar.png") : currentUser.photoURL}
                     } /> */}
-                {isPicked ? <Image resize Mode="contain" style={styles.cardImage} source={{uri:img}} /> :
-                <Image resize Mode="contain" style={styles.cardImage} source={require("../../assets/avatar.png")} />}
+                {isPicked ? <Image resize Mode="contain" style={styles.cardImage} source={{ uri: img }} /> :
+                    <Image resize Mode="contain" style={styles.cardImage} source={require("../../assets/avatar.png")} />}
             </View>);
     }
     const services = [
@@ -110,14 +119,14 @@ function EditProfile({ currentUser, setcurrentUser,setcurrentView }) {
         {
             id: "3",
             name: "Go Back",
-            action: (onPress) => setcurrentView({screen: keys.screens.PROFILE, header: true, footer:true})
+            action: (onPress) => setcurrentView({ screen: keys.screens.PROFILE, header: true, footer: true })
         }
     ]
     const _renderItem = (item) => {
         return <View style={styles.submitButton}
             key={item.id}>
             <TouchableOpacity
-                onPress = {()=>item.action()} // to be added
+                onPress={() => item.action()} // to be added
                 style={styles.listItemTouchable}>
                 <View style={{ flex: 0.6 }}>
                     <Text style={styles.ServiceNameStyle}>{item.name}</Text>
@@ -126,21 +135,21 @@ function EditProfile({ currentUser, setcurrentUser,setcurrentView }) {
         </View>
     }
     return (
-        <View style = {styles.homeScreen}>
-            <AvatarCard/>  
+        <View style={styles.homeScreen}>
+            <AvatarCard />
             <Text
                 style={styles.EditProfileTitle}>
                 Edit Profile
-            </Text> 
-            <TextInput style = {styles.input}
-                underlineColorAndroid = "transparent"
-                value = {userDetails.name} 
-                onChangeText = {(text) => handleName(text)}
+            </Text>
+            <TextInput style={styles.input}
+                underlineColorAndroid="transparent"
+                value={userDetails.name}
+                onChangeText={(text) => handleName(text)}
             />
-            <TextInput style = {styles.input}
-                underlineColorAndroid = "transparent"
-                value = {userDetails.email}
-                onChangeText = {(text) => handleEmail(text)}
+            <TextInput style={styles.input}
+                underlineColorAndroid="transparent"
+                value={userDetails.email}
+                onChangeText={(text) => handleEmail(text)}
             />
             <SafeAreaView style={{ flex: 1, marginBottom: 15 }}>
                 {
@@ -174,7 +183,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         textAlign: 'center',
         fontSize: 20
-     },
+    },
     card: {
         backgroundColor: "white",
         width: '92%',
@@ -207,7 +216,7 @@ const styles = StyleSheet.create({
         padding: "2%",
         marginHorizontal: "2%",
     },
-    submitButton:{
+    submitButton: {
         backgroundColor: 'white',
         width: '92%',
         height: undefined,

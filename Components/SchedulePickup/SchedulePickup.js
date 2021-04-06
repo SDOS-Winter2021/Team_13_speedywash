@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { View, Button, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import RNDateTimePicker from "@react-native-community/datetimepicker"
 import { Picker } from '@react-native-picker/picker';
+import { Alert } from 'react-native';
+import { TextInput } from 'react-native';
+// import { RadioButton } from 'react-native-paper';
 
 function TimePickerList({ time, setTime }) {
     const Slots = ["9 - 10 AM",
@@ -19,7 +22,29 @@ function TimePickerList({ time, setTime }) {
 
 }
 
-function SchedulePickup({ date, time, setDate, setTime }) {
+function AddressPicker({ currentUser, address, setAddress }) {
+    const Slots = ["home", "office", "other"]
+    console.log(currentUser)
+    return <View>
+        <Picker style={styles.picker} mode="dropdown" selectedValue={address} onValueChange={(itemValue) => {
+            if (currentUser[itemValue] == "") {
+                Alert.alert("Address Not found", "Go to Profile -> Manage Address to Add address")
+                return;
+            }
+            setAddress(itemValue)
+        }}>
+            {Slots.map((item) => <Picker.Item key={item} label={item} value={item} />)}
+        </Picker>
+        <TextInput style={{textAlign: 'center', fontSize: 15}} disabled={true} value={currentUser[address]}/>
+    </View>
+
+
+}
+
+function SchedulePickup({ currentUser, data }) {
+    const [date, setDate] = useState(null)
+    const [time, setTime] = useState("4 - 5 PM")
+    const [address, setAddress] = useState("home")
     const maxDate = new Date(new Date().setDate(new Date().getDate() + 7))
     const [pickDate, setPickDate] = useState(false);
 
@@ -30,6 +55,7 @@ function SchedulePickup({ date, time, setDate, setTime }) {
             </TouchableOpacity>
             {pickDate && <RNDateTimePicker minimumDate={new Date()} maximumDate={maxDate} value={date == null ? new Date() : date} onChange={(e, newSelectedDate) => { setPickDate(false); setDate(newSelectedDate) }} />}
             <TimePickerList time={time} setTime={setTime} />
+            <AddressPicker currentUser={currentUser} address={address} setAddress={setAddress} />
             <Button title={"Proceed"} disabled={date == null || time == null} onPress={() => { console.log("Code fore next Screen") }} />
         </View>
     )

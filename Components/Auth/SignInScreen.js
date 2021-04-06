@@ -53,7 +53,7 @@ function SendOTPView({ sendOTPPressed, setsendOTPPressed, contact, updateContact
     * It takes OTP input from user  and check if it matches or not
     * If OTP is verfied then the current stage is set to 2
 */
-function VerifyOTPView({setincompleteUser, setCurrentStage, sendOTPPressed, verificationCode, verificationId, setVerificationCode }) {
+function VerifyOTPView({ setincompleteUser, setCurrentStage, sendOTPPressed, verificationCode, verificationId, setVerificationCode }) {
 
     function performSignIn() {
         try {
@@ -64,7 +64,11 @@ function VerifyOTPView({setincompleteUser, setCurrentStage, sendOTPPressed, veri
                     phoneNumber: user.phoneNumber,
                     email: "",
                     photoURL: "",
-                    displayName: ""
+                    displayName: "",
+                    creationTime: "",
+                    home: "",
+                    office: "",
+                    other: ""
                 })
                 setCurrentStage(2);
                 Alert.alert("Success", "Phone number verified");
@@ -103,7 +107,7 @@ function VerifyOTPView({setincompleteUser, setCurrentStage, sendOTPPressed, veri
     * 4: Input OTP
     * 5: Verify If OTP is correct or not
 */
-function MainVerificationScreen({setCurrentStage, incompleteUser, setincompleteUser}) {
+function MainVerificationScreen({ setCurrentStage, incompleteUser, setincompleteUser }) {
     const [sendOTPEnabled, setsendOTPEnabled] = useState(false);
     const [sendOTPPressed, setsendOTPPressed] = useState(false);
     const [contact, setcontact] = useState("+91 ");

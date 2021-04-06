@@ -1,18 +1,20 @@
-import React,{useEffect} from 'react'
+import React, { useEffect } from 'react'
 import { Button, TextInput, View, StyleSheet } from 'react-native'
 import * as firebase from 'firebase';
 import 'firebase/firestore';
 import AsyncStorage from '@react-native-community/async-storage';
 import keys from "../../configs/KEYS"
+// import {setValue, getValue} from "../../configs/CacheManager"
 
-function MyTextField({incompleteUser, setincompleteUser, placeholder, attribute, isEditable, isAutofocus}){
+function MyTextField({ incompleteUser, setincompleteUser, placeholder, attribute, isEditable, isAutofocus, multiline }) {
     return <TextInput
-            style={styles.textBox}
-            placeholder={placeholder}
-            editable={isEditable}
-            autoFocus={isAutofocus}
-            value={incompleteUser[attribute]}
-            onChangeText={(text)=>setincompleteUser((prev)=>({...prev, [attribute]: text}))} 
+        style={styles.textBox}
+        placeholder={placeholder}
+        editable={isEditable}
+        autoFocus={isAutofocus}
+        value={incompleteUser[attribute]}
+        onChangeText={(text) => setincompleteUser((prev) => ({ ...prev, [attribute]: text }))}
+        multiline={multiline}
     />
 }
 
@@ -40,18 +42,22 @@ function CreateUser({ incompleteUser, setincompleteUser, currentUser, setcurrent
     }, [])
 
 
-    function handleSubmission(){
-        db.collection("users").doc(incompleteUser.uid).set(incompleteUser);
-        setcurrentUser(incompleteUser);
-        AsyncStorage.setItem(keys.storage.USER, JSON.stringify(incompleteUser))
+    function handleSubmission() {
+        const storeObj = { ...incompleteUser, creationTime: new Date() };
+        db.collection("users").doc(storeObj.uid).set(storeObj).then(() => {
+            AsyncStorage.setItem(keys.storage.USER, JSON.stringify(storeObj)).then(() => {
+                setcurrentUser(storeObj);
+            })
+        });
     }
 
     return (
         <View style={styles.Container}>
-            <MyTextField incompleteUser={incompleteUser} setincompleteUser={setincompleteUser} isAutofocus={true} placeholder="Your name" attribute="displayName" isEditable={true} />
-            <MyTextField incompleteUser={incompleteUser} setincompleteUser={setincompleteUser} isAutofocus={false} placeholder="Email" attribute="email" isEditable={true} />
-            <MyTextField incompleteUser={incompleteUser} setincompleteUser={setincompleteUser} isAutofocus={false} placeholder="Contact Number" attribute="phoneNumber" isEditable={false} />
-            <Button disabled={incompleteUser.email.length==0 || incompleteUser.displayName.length==0 || incompleteUser.phoneNumber.length==0 } title="Submit" onPress={handleSubmission}/>
+            <MyTextField incompleteUser={incompleteUser} setincompleteUser={setincompleteUser} isAutofocus={true} placeholder="Your name" attribute="displayName" isEditable={true} multiline={false} />
+            <MyTextField incompleteUser={incompleteUser} setincompleteUser={setincompleteUser} isAutofocus={false} placeholder="Email" attribute="email" isEditable={true} multiline={false} />
+            <MyTextField incompleteUser={incompleteUser} setincompleteUser={setincompleteUser} isAutofocus={false} placeholder="Contact Number" attribute="phoneNumber" isEditable={false} multiline={false} />
+            <MyTextField incompleteUser={incompleteUser} setincompleteUser={setincompleteUser} isAutofocus={false} placeholder="home address" attribute="home" isEditable={true} multiline={true} />
+            <Button disabled={incompleteUser.email.length == 0 || incompleteUser.displayName.length == 0 || incompleteUser.phoneNumber.length == 0 || incompleteUser.home.length == 0} title="Submit" onPress={handleSubmission} />
         </View>
     )
 }

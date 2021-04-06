@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import CurrentLocationPicker from "../CurrentLocationPicker/CurrentLocationPicker"
-import SchedulePickup from "../SchedulePickup/SchedulePickup"
 
 /*
     * This function takes in location object which is 
@@ -18,18 +17,12 @@ function Subscriptions({ currentUser, setcurrentUser }) {
     // Necessary and will be passed to CurrentLocationPicker
     const [location, setlocation] = useState(null)
     const [numericalLocationObject, setNumericalLocationObject] = useState(null)
-    const [date, setDate] = useState(null)
-    const [time, setTime] = useState("4 - 5 PM")
 
-
-
-    
     return (
         <View style={styles.main}>
             <CurrentLocationPicker setLocation={setlocation} setNumericalLocationObject={setNumericalLocationObject} />
             <Text>This is Subscriptions View</Text>
             {location != null && <Text>{`Your Location: ${parseLocation(location)}`}</Text>}
-            <SchedulePickup date={date} time={time} setDate={setDate} setTime={setTime} />
         </View>
     )
 }
