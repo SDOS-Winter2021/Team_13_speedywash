@@ -75,11 +75,14 @@ function EditProfile({ currentUser, setcurrentUser, setcurrentView }) {
             "email": userDetails.email,
         }
         firebase.firestore().collection("users").doc(currentUser.uid).update(newObj).then(() => {
-            setcurrentUser({ ...currentUser, newObj })
-            setValue(keys.storage.USER, { ...currentUser, newObj }, keys.time.WEEK)
+
+            AsyncStorage.setItem(keys.storage.USER, JSON.stringify({ ...currentUser, ...newObj }))
+                .then(() => {
+                    setcurrentUser({ ...currentUser, ...newObj })
+                    setavatarname(userDetails.name);
+                    Alert.alert("Success", "Details Updated Successfully")
+                })
         });
-        setavatarname(userDetails.name);
-        Alert.alert("Details updated")
     }
     // console.log(img)
     function AvatarCard() {
