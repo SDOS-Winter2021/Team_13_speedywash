@@ -4,8 +4,16 @@ import RNDateTimePicker from "@react-native-community/datetimepicker"
 import { Picker } from '@react-native-picker/picker';
 import { Alert } from 'react-native';
 import { TextInput } from 'react-native';
-// import { RadioButton } from 'react-native-paper';
+import keys from "../../configs/KEYS"
+import * as Crypto from 'expo-crypto';
+import * as firebase from 'firebase';
+import { removeValue } from "../../configs/CacheManager"
 
+/*
+    Child of SchedulePickup
+    UI component that allows user to select 
+    prefereable time slot for pickup of clothes
+*/
 function TimePickerList({ time, setTime }) {
     const Slots = ["9 - 10 AM",
         "10 - 11 AM",
@@ -21,10 +29,13 @@ function TimePickerList({ time, setTime }) {
     </Picker>
 
 }
-
+/*
+    Child of SchedulePickup
+    UI Component responsible for allowing user to switch it's address
+    <Address is only switchable if it has been added in manage address>
+*/
 function AddressPicker({ currentUser, address, setAddress }) {
     const Slots = ["home", "office", "other"]
-    console.log(currentUser)
     return <View>
         <Picker style={styles.picker} mode="dropdown" selectedValue={address} onValueChange={(itemValue) => {
             if (currentUser[itemValue] == "") {
@@ -35,18 +46,84 @@ function AddressPicker({ currentUser, address, setAddress }) {
         }}>
             {Slots.map((item) => <Picker.Item key={item} label={item} value={item} />)}
         </Picker>
-        <TextInput style={{textAlign: 'center', fontSize: 15}} disabled={true} value={currentUser[address]}/>
+        <TextInput style={{ margin: 10, textAlign: 'center', fontSize: 15 }} editable={false} multiline={true} value={currentUser[address]} />
     </View>
 
 
 }
 
-function SchedulePickup({ currentUser, data }) {
+/*
+    Father Component of this module
+    Responsible for taking final information related to placing order
+    and updating the order placing information into the database
+*/
+function SchedulePickup({ setcurrentView, currentUser, data, amount }) {
     const [date, setDate] = useState(null)
     const [time, setTime] = useState("4 - 5 PM")
     const [address, setAddress] = useState("home")
     const maxDate = new Date(new Date().setDate(new Date().getDate() + 7))
     const [pickDate, setPickDate] = useState(false);
+
+    /*
+        This function is responsible for placing order
+        order id is generated as an hash of concatenation of user id and orderTime string
+        SHA1 is used for generating the hash
+        This function also updates/pushes the order related information into the database
+    */
+    function placeOrder() {
+        const oTime = new Date()
+        Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA1, currentUser.uid + oTime.toString())
+            .then((hash) => {
+                const orderInfo = {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName,
+                    phoneNumber: currentUser.phoneNumber,
+                    orderItems: data,
+                    pickUpAddress: currentUser[address],
+                    pickUpDate: date,
+                    pickUpTimeSlot: time,
+                    orderTime: oTime,
+                    orderTimeString: oTime.toString(),
+                    addressLabel: address,
+                    totalAmount: amount,
+                    pickUpTimeSlotStart: parseInt(time.split(" ")[0]),
+                    pickUpTimeSlotEnd: parseInt(time.split(" ")[2]),
+                    orderStatus: keys.orderStatus.PLACED,
+                    oid: hash
+                }
+                firebase.firestore().collection("incompleteOrders").doc(currentUser.uid).get().then((record) => {
+                    if (record.exists) {
+                        firebase.firestore().collection("incompleteOrders").doc(currentUser.uid).update({
+                            [orderInfo.oid]: orderInfo
+                        }).then(() => {
+                            Alert.alert("Success", "Your order has been placed successfully, go to profile to see more details")
+                            removeValue(keys.storage.CART)
+                        }).then(() => {
+                            setcurrentView({
+                                screen: keys.screens.HOME,
+                                header: true,
+                                footer: true
+                            })
+                        })
+
+                    }
+                    else {
+                        firebase.firestore().collection("incompleteOrders").doc(currentUser.uid).set({
+                            [orderInfo.oid]: orderInfo
+                        }).then(() => {
+                            Alert.alert("Success", "Your order has been placed successfully, go to My orders to see more details")
+                            removeValue(keys.storage.CART)
+                        }).then(() => {
+                            setcurrentView({
+                                screen: keys.screens.HOME,
+                                header: true,
+                                footer: true
+                            })
+                        })
+                    }
+                })
+            })
+    }
 
     return (
         <View style={styles.main}>
@@ -56,7 +133,7 @@ function SchedulePickup({ currentUser, data }) {
             {pickDate && <RNDateTimePicker minimumDate={new Date()} maximumDate={maxDate} value={date == null ? new Date() : date} onChange={(e, newSelectedDate) => { setPickDate(false); setDate(newSelectedDate) }} />}
             <TimePickerList time={time} setTime={setTime} />
             <AddressPicker currentUser={currentUser} address={address} setAddress={setAddress} />
-            <Button title={"Proceed"} disabled={date == null || time == null} onPress={() => { console.log("Code fore next Screen") }} />
+            <Button title={"Place Order"} disabled={date == null || time == null} onPress={placeOrder} />
         </View>
     )
 }
