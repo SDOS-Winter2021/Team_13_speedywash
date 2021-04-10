@@ -11,14 +11,9 @@ function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
     var vdata = {}
     const [total, setTotal] = useState(0);
     const [proceed, setProceed] = useState(false);
-    useEffect(() => {
+
+    function cartItemsAndPriceUpdater() {
         getValue(keys.storage.CART).then((gotData) => {
-            if (gotData != null && Object.keys(gotData).length == 0) {
-                removeValue(keys.storage.CART)
-                setData({})
-                setTotal(0)
-                return;
-            }
             if (gotData !== null) {
                 list_of_headings = Object.keys(gotData)
                 var price = 0
@@ -35,7 +30,12 @@ function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
                 setTotal(price)
             }
         })
+    }
+
+    useEffect(() => {
+        cartItemsAndPriceUpdater()
     }, [])
+
     return (
         proceed == true ?
             <View><SchedulePickup setcurrentView={setcurrentView} currentUser={currentUser} data={data} amount={total} /></View> :
@@ -44,8 +44,7 @@ function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
                     <View style={styles.allservices}>
                         {data != null && Object.keys(data).map((item, key) => {
                             return (<View key={key} style={styles.services}>
-                                <ServiceSpecific data={data[item]} serviceSelected={item} currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView}>
-                                </ServiceSpecific>
+                                <ServiceSpecific cartItemsAndPriceUpdater={cartItemsAndPriceUpdater} data={data[item]} serviceSelected={item} currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />
                             </View>
                             )
                         })}

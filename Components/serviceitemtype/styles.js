@@ -11,18 +11,19 @@ const styles = StyleSheet.create({
         marginBottom:10,
         borderRadius:10,
         borderColor:"black",
-        borderWidth:1
+        borderWidth:1,
+        height: 50
       },
       box:{
           width:"10%",
           height:'100%',
-          backgroundColor:'blue',
+          // backgroundColor:'blue',
           
       },
       image:{
-          height:'100%',
-          width:'100%',
-          backgroundColor:"red"
+          height:'90%',
+          width:'90%',
+          // backgroundColor:"red"
       },
       button:{
           width:"50%",
@@ -31,7 +32,8 @@ const styles = StyleSheet.create({
           height:"100%",
           justifyContent:"center",
           alignItems:'center',
-          borderRadius:10,
+          borderRadius:50,
+          marginRight: 3
         //   backgroundColor:"white",
           
       },

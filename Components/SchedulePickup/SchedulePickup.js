@@ -63,6 +63,7 @@ function SchedulePickup({ setcurrentView, currentUser, data, amount }) {
     const [address, setAddress] = useState("home")
     const maxDate = new Date(new Date().setDate(new Date().getDate() + 7))
     const [pickDate, setPickDate] = useState(false);
+    const [pressable, setPressable] = useState(true);
 
     /*
         This function is responsible for placing order
@@ -71,6 +72,7 @@ function SchedulePickup({ setcurrentView, currentUser, data, amount }) {
         This function also updates/pushes the order related information into the database
     */
     function placeOrder() {
+        setPressable(false)
         const oTime = new Date()
         Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA1, currentUser.uid + oTime.toString())
             .then((hash) => {
@@ -133,7 +135,7 @@ function SchedulePickup({ setcurrentView, currentUser, data, amount }) {
             {pickDate && <RNDateTimePicker minimumDate={new Date()} maximumDate={maxDate} value={date == null ? new Date() : date} onChange={(e, newSelectedDate) => { setPickDate(false); setDate(newSelectedDate) }} />}
             <TimePickerList time={time} setTime={setTime} />
             <AddressPicker currentUser={currentUser} address={address} setAddress={setAddress} />
-            <Button title={"Place Order"} disabled={date == null || time == null} onPress={placeOrder} />
+            <Button title={"Place Order"} disabled={date == null || time == null || !pressable} onPress={placeOrder} />
         </View>
     )
 }
@@ -150,9 +152,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         justifyContent: "center",
         margin: 10,
-        // marginLeft: "40%",
         borderRadius: 10,
-        // borderClo
     },
     dateText: {
         textAlign: 'center',
