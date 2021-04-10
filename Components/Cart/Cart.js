@@ -7,19 +7,13 @@ import ServiceSpecific from '../ServiceSpecific/ServiceSpecific.js';
 import styles from './styles.js';
 import SchedulePickup from "../SchedulePickup/SchedulePickup"
 function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState({});
     var vdata = {}
     const [total, setTotal] = useState(0);
     const [proceed, setProceed] = useState(false);
-    useEffect(() => {
-        console.log("useEffect")
+
+    function cartItemsAndPriceUpdater() {
         getValue(keys.storage.CART).then((gotData) => {
-            if (gotData != null && Object.keys(gotData).length == 0) {
-                removeValue(keys.storage.CART)
-                setData(null)
-                setTotal(0)
-                return;
-            }
             if (gotData !== null) {
                 list_of_headings = Object.keys(gotData)
                 var price = 0
@@ -36,25 +30,28 @@ function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
                 setTotal(price)
             }
         })
+    }
+
+    useEffect(() => {
+        cartItemsAndPriceUpdater()
     }, [])
-    console.log("Banana")
+
     return (
         proceed == true ?
-            <View><SchedulePickup currentUser={currentUser} data={data} /></View> :
+            <View><SchedulePickup setcurrentView={setcurrentView} currentUser={currentUser} data={data} amount={total} /></View> :
             <View style={styles.bigcontainer}>
                 <ScrollView style={styles.container}>
                     <View style={styles.allservices}>
                         {data != null && Object.keys(data).map((item, key) => {
                             return (<View key={key} style={styles.services}>
-                                <ServiceSpecific data={data[item]} serviceSelected={item} currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView}>
-                                </ServiceSpecific>
+                                <ServiceSpecific cartItemsAndPriceUpdater={cartItemsAndPriceUpdater} data={data[item]} serviceSelected={item} currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />
                             </View>
                             )
                         })}
                         {data == null && <View><Text>CART IS EMPTY</Text></View>}
                     </View>
                 </ScrollView>
-                {<TouchableOpacity disabled={(data == null) || (total == 0)} onPress={() => {
+                {<TouchableOpacity onPress={() => {
                     setProceed(true);
                 }} style={styles.total}><Text style={styles.totaltext}>Total Amount is {total}</Text><Text style={styles.totaltext}>(Click to Proceed)</Text></TouchableOpacity>}
             </View>

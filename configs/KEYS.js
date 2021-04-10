@@ -23,6 +23,28 @@ const keys = {
 		HOMEBACKGROUND: '#DCF2FD',
 		AVATAR: '#A9CCE3'
 	},
+	orderStatus: {
+		PLACED: {
+			stage: 1,
+			stageName: "PLACED",
+			message: "Pickup Pending"
+		},
+		PICKUPDONE: {
+			stage: 2,
+			stageName: "PICKUPDONE",
+			message: "Service Pending"
+		},
+		SERVICEDONE: {
+			stage: 3,
+			stageName: "SERVICEDONE",
+			message: "Delivery Pending"
+		},
+		COMPLETED: {
+			stage: 4,
+			stageName: "COMPLETED",
+			message: "Completed"
+		}
+	},
 	time: {
 		SECOND: 1000,
 		MINUTE: 60 * 1000,
