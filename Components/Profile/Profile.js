@@ -55,7 +55,7 @@ function Profile({ currentUser, setcurrentUser, setcurrentView }) {
         {
             id: "3",
             name: "My Orders",
-            action: () => { }
+            action: (onPress) => { setcurrentView({ screen: keys.screens.MYORDERS, header: true, footer: true})}
         },
         {
             id: "4",
