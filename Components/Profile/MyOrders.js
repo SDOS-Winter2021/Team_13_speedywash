@@ -13,7 +13,9 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
     const [incompleteOrders, setIncompleteOrders] = useState({});
     const [completedOrders, setCompletedOrders] = useState({});
     const [selectedOrder, setSelectedOrder] = useState(null);
-
+    const [incompleteOrdersList, setIncompleteOrdersList] = useState(null);
+    const [completedOrdersList, setCompletedOrdersList] = useState(null);
+    const [Order, setOrder] = useState({});
     useEffect(() => {
         firebase.firestore().collection("incompleteOrders").doc(currentUser.uid).get().then((record) => {
             console.log("Incompleted Orders Requested");
@@ -21,54 +23,80 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
             if (record && record.data()) {
                 //console.log(Object.keys(record.data()));
                 setIncompleteOrders(record.data());
+                setIncompleteOrdersList(Object.keys(record.data()));
             }
         })
-    }, [])
-    useEffect(() => {
-        firebase.firestore().collection("incompleteOrders").doc(currentUser.uid).get().then((record) => {
+        .then((record) => {
             console.log("Completed Orders Requested");
             //console.log(record.data());
             if (record && record.data()) {
                 //console.log(Object.keys(record.data()));
                 setCompletedOrders(record.data());
+                setCompletedOrdersList(Object.keys(completedOrders));
             }
         })
     }, [])
     
-    const [incompleteOrdersList, setIncompleteOrdersList] = useState(Object.keys(incompleteOrders));
-    const [completedOrdersList, setCompletedOrdersList] = useState(Object.keys(completedOrders));
-
+    
+    console.log(incompleteOrdersList);
     function TopBar(){
         return <View style={styles.topBar}>
         <TouchableOpacity 
         style={orderType == 0 ? styles.selectedTypeButton : styles.unselectedTypeButton}
-        onPress={()=>{setOrderType(1-orderType); setSelectedOrder(null)}}>
+        onPress={()=>{
+            orderType == 1 && setSelectedOrder(null);
+            setOrderType(0)
+            }}>
             <Text style={styles.orderTypeText}>Active Orders</Text>
         </TouchableOpacity>
         <TouchableOpacity 
         style={orderType == 1 ? styles.selectedTypeButton : styles.unselectedTypeButton}
-        onPress={()=>{setOrderType(1-orderType); setSelectedOrder(null)}}>
+        onPress={()=>{
+            orderType == 1 && setSelectedOrder(null);
+            setOrderType(1)
+            }}>
             <Text style={styles.orderTypeText}>Past Orders</Text>
         </TouchableOpacity>
     </View>
     }
 
-    const _renderItem = (item) => {
+
+
+    const _renderIncompleteItem = (item) => {
         // Below statement will be required while using FlatList and input will be 'element'
         // const item=element.item;
-        return <View style={styles.serviceListItem}
-            /* key won't be required while using FlatList*/
-            key={item}>
-            <TouchableOpacity>
-                // onPress={() => setServiceSelected(item)}
-                // style={styles.listItemTouchable}>
-                // <View style={{ flex: 0.4 }}>
-                //     <Image resizeMode="contain" style={styles.serviceImage} source={require("../../assets/favicon.png")} />
-                // </View>
-                // <View style={{ flex: 0.6 }}>
-                //     <Text style={styles.ServiceNameStyle}>{item}</Text>
-                // </View>
-            </TouchableOpacity>
+        pickupDate = incompleteOrders[item]["pickUpDate"].toDate();
+        return <View style={styles.outerBox} key={item}> 
+
+            <View style={{flexDirection: "row"}}>
+                <View style={{flex: 0.5, flexDirection: "column", justifyContent: 'space-around'}}>     
+                    {
+                        Object.keys(incompleteOrders[item]["orderItems"]).map((current)=>{
+                            return <Text
+                            style={styles.orderDetails} 
+                            key={current}>{current}</Text>
+                        })
+                    }
+                </View>
+                <View style={{flex: 0.5, flexDirection: "column", justifyContent: 'center'}}>
+                    <Text style={styles.pickupDate}>{pickupDate.getDate()+"/"+pickupDate.getMonth()+"/"+pickupDate.getFullYear()}</Text>
+                    <Text style={styles.pickupSlot}>{incompleteOrders[item]["pickUpTimeSlot"]}</Text>
+                </View>
+            </View>
+            <Text style={styles.amountToBe}>{"Amount to Pay : "+incompleteOrders[item]["totalAmount"]}</Text>
+            <View style={styles.statusBar}> 
+                <TouchableOpacity
+                disabled="true">
+                    <View style={styles.statusBox}>
+                        <Text style={styles.statusText}>Pickup Pending</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <View style={styles.cancelBox}>
+                        <Text style={styles.cancelText}>CANCEL ORDER</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
         </View>
     };
 
@@ -77,14 +105,13 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         showsVerticalScrollIndicator={false}
         style={styles.wholePage}>
         <TopBar></TopBar>
-
-        <View style={{flex: 0.8}}>
-            <Text>dlkjfldjl</Text>
-        </View>
         {
-            orderType==0 ? 
-            incompleteOrdersList.map(_renderItem) :
-            completedOrdersList.map(_renderItem)
+            incompleteOrdersList==null ||
+            (orderType==0 && incompleteOrdersList.map(_renderIncompleteItem))
+        }
+        {
+            completedOrdersList==null ||
+            (orderType==1 && completedOrdersList.map(_renderIncompleteItem))
         }
     </ScrollView>
 }
@@ -94,15 +121,74 @@ const styles = StyleSheet.create({
         flex: 1,
         width: "100%"
     },
+    amountToBe : {
+        alignSelf: "center",
+        fontSize: 18,
+        fontWeight: 'bold',
+        margin: "3%"
+    },
+    orderDetails : {
+        fontWeight: 'bold',
+        fontSize: 16,
+        margin: "2%",
+        textAlign: 'center'
+    },
+    pickupDate : {
+        fontWeight: 'bold',
+        fontSize: 17,
+        margin: "2%",
+        alignSelf: 'center'
+    },
+    pickupSlot : {
+        fontSize: 15,
+        margin: "2%",
+        alignSelf: 'center'
+    },
     topBar: {
         width: "100%",
         height: undefined,
         aspectRatio: 1/0.12,
         flexDirection: "row"
     },
+    outerBox : {
+        width: "94%",
+        alignSelf: 'center',
+        marginVertical: "2%",
+        backgroundColor: "#F4F0F0"
+    },
+    statusBar :{
+        marginBottom: "5%",
+        width: "100%",
+        height: undefined,
+        aspectRatio: 1/0.10,
+        flexDirection: "row",
+        justifyContent: 'space-around'
+    },
+    statusBox :{
+        backgroundColor: "#BFE9B5"
+    },
+    cancelBox : {
+        backgroundColor: "#FCA19C"
+    },
+    statusText : {
+        fontSize: 15,
+        textTransform: 'uppercase',
+        margin: '5%',
+        alignSelf: 'center',
+        fontWeight: 'bold',
+        color: "#14760F"
+    },
+    cancelText : {
+        fontSize: 15,
+        color: "#9D1010",
+        textTransform: 'uppercase',
+        margin: '5%',
+        alignSelf: 'center',
+        fontWeight: 'bold'
+    },
     orderTypeText : {
         textAlign: "center",
-        fontSize: 16,
+        fontSize: 18,
         fontWeight: 'bold'
     },
     selectedTypeButton: {
@@ -123,74 +209,6 @@ const styles = StyleSheet.create({
         backgroundColor: keys.colors.HOMEBACKGROUND,
         flex: 1,
         width: '100%'
-    },
-    EditProfileTitle: {
-        textAlign: 'center',
-        fontWeight: 'bold',
-        fontSize: 25,
-        marginBottom: 10,
-        color: keys.colors.MAIN
-    },
-    input: {
-        backgroundColor: 'white',
-        width: '92%',
-        height: undefined,
-        aspectRatio: 1 / 0.185,
-        marginHorizontal: '4%',
-        marginVertical: '1%',
-        borderRadius: 5,
-        textAlign: 'center',
-        fontSize: 20
-    },
-    card: {
-        backgroundColor: "white",
-        width: '92%',
-        height: "25%",
-        borderStyle: 'solid',
-        borderWidth: 1,
-        marginHorizontal: '4%',
-        marginVertical: '1.5%',
-        borderRadius: 17,
-        marginVertical: "2%",
-        marginBottom: "8%",
-        marginTop: "5%",
-        flexDirection: 'row',
-        justifyContent: "space-evenly",
-        alignItems: 'center'
-    },
-    cardImage: {
-        width: 120,
-        height: 120,
-        borderRadius: 150 / 2,
-        overflow: "hidden",
-        borderWidth: 3,
-        borderColor: keys.colors.MAIN,
-    },
-    cardText: {
-        textAlign: 'left',
-        textAlignVertical: 'center',
-        fontSize: 18,
-        color: keys.colors.MAIN,
-        padding: "2%",
-        marginHorizontal: "2%",
-    },
-    submitButton: {
-        backgroundColor: 'white',
-        width: '92%',
-        height: undefined,
-        aspectRatio: 1 / 0.185,
-        marginHorizontal: '4%',
-        marginVertical: '1%',
-        borderRadius: 5
-    },
-    listItemTouchable: {
-        flexDirection: 'row',
-        justifyContent: "space-evenly"
-    },
-    ServiceNameStyle: {
-        fontSize: 20,
-        alignSelf: 'center',
-        margin: '10%'
-    },
+    }
 });
 export default MyOrders
