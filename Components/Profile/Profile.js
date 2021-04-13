@@ -4,11 +4,10 @@ import keys from "../../configs/KEYS"
 import AsyncStorage from '@react-native-community/async-storage';
 import * as firebase from 'firebase';
 import { Image, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { cleanCache } from "../../configs/CacheManager";
-
 
 function Temporary({ currentUser, setcurrentUser }) {
     function performSignout() {
@@ -55,7 +54,7 @@ function Profile({ currentUser, setcurrentUser, setcurrentView }) {
         {
             id: "3",
             name: "My Orders",
-            action: () => { }
+            action: (onPress) => { setcurrentView({ screen: keys.screens.MYORDERS, header: true, footer: true})}
         },
         {
             id: "4",
@@ -95,14 +94,17 @@ function Profile({ currentUser, setcurrentUser, setcurrentView }) {
     }
 
     return (
-        <View style={styles.homeScreen}>
+        <ScrollView 
+        nestedScrollEnabled={false}
+        showsVerticalScrollIndicator={false}
+        style={styles.homeScreen}>
             <AvatarCard />
-            <SafeAreaView style={{ flex: 1, marginBottom: 15 }}>
+            <SafeAreaView style={{ flex: 1, marginBottom: "20%" }}>
                 {
                     services.map(_renderItem)
                 }
             </SafeAreaView>
-        </View>
+        </ScrollView>
     )
 }
 const styles = StyleSheet.create({

@@ -13,7 +13,8 @@ const keys = {
 		NOTIFICATION: "notification",
 		EDITPROFILE: "editprofile",
 		MANAGEADDRESS: "manageaddress",
-		ADDADDRESS: "addAddress"
+		ADDADDRESS: "addAddress",
+		MYORDERS: "myOrders"
 	},
 	colors: {
 		HIGHLIGHT: "#2196F3",

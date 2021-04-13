@@ -11,6 +11,7 @@ import Notification from '../Notification/Notification';
 import EditProfile from '../Profile/EditProfile'
 import ManageAddress from '../Profile/ManageAddress'
 import AddAddress from '../Profile/AddAddress'
+import MyOrders from '../Profile/MyOrders'
 // import ServiceSpecific from '../ServiceSpecific/ServiceSpecific'
 
 /* 
@@ -41,7 +42,9 @@ function SwitchView({ currentView, setcurrentView, currentUser, setcurrentUser }
             return <ManageAddress currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
         case keys.screens.ADDADDRESS:
             return <AddAddress currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
-        // case keys.screens.SERVICESPECIFIC:
+        case keys.screens.MYORDERS:
+            return <MyOrders currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
+            // case keys.screens.SERVICESPECIFIC:
         //     return <ServiceSpecific currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
     }
 }
