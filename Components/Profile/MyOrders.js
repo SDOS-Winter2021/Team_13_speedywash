@@ -25,22 +25,14 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
                 //console.log(Object.keys(record.data()));
                 setIncompleteOrders(record.data());
                 setIncompleteOrdersList(Object.keys(record.data()));
-            }
-        })
-        .then((record) => {
-            console.log("Completed Orders Requested");
-            //console.log(record.data());
-            if (record && record.data()) {
-                //console.log(Object.keys(record.data()));
+                // BELOW 2 LINES ARE ONLY FOR TWO TESTING PURPOSES. BE SURE TO COMMENT THEM FOR CORRECT WORKING
                 setCompletedOrders(record.data());
-                setCompletedOrdersList(Object.keys(completedOrders));
+                setCompletedOrdersList(Object.keys(record.data()));
             }
         })
     }, [])
     
-    
-
-    //console.log(incompleteOrdersList);
+    //console.log(completedOrdersList);
     function TopBar(){
         return <View style={styles.topBar}>
         <TouchableOpacity 
@@ -111,6 +103,7 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
                     }
                 </View>
                 <View style={{flex: 0.5, flexDirection: "column", justifyContent: 'center'}}>
+                    <Text style={styles.pickupText}>Pickup Date</Text>
                     <Text style={styles.pickupDate}>{pickupDate.getDate()+"/"+pickupDate.getMonth()+"/"+pickupDate.getFullYear()}</Text>
                     <Text style={styles.pickupSlot}>{incompleteOrders[item]["pickUpTimeSlot"]}</Text>
                 </View>
@@ -133,6 +126,45 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         </View>
     };
 
+    const _renderCompletedItem = (item) => {
+        // Below statement will be required while using FlatList and input will be 'element'
+        // const item=element.item;
+        
+        // return <View><Text>djhf</Text><Button title="kdjf" onPress={()=>{onClickCancel(item)}}></Button></View>
+        pickupDate = completedOrders[item]["pickUpDate"].toDate();
+        // Uncomment below line when database is updated with drop dates
+        // dropDate = completedOrders[item]["dropDate"].toDate();
+        return <View style={styles.outerBox} key={item}> 
+
+            <View style={{flexDirection: "row"}}>
+                <View style={{flex: 0.5, flexDirection: "column", justifyContent: 'space-around'}}>     
+                    {
+                        Object.keys(completedOrders[item]["orderItems"]).map((current)=>{
+                            return <Text
+                            style={styles.orderDetails} 
+                            key={current}>{current}</Text>
+                        })
+                    }
+                </View>
+                <View style={{flex: 0.5, flexDirection: "column", justifyContent: 'center'}}>
+                    <Text style={styles.pickupText}>Pickup Date</Text>
+                    <Text style={styles.pickupSlot}>{pickupDate.getDate()+"/"+pickupDate.getMonth()+"/"+pickupDate.getFullYear()}</Text>
+                    <Text style={styles.pickupText}>Drop Off Date</Text>
+                    <Text style={styles.pickupSlot}>17/4/2021</Text>
+                </View>
+            </View>
+            <Text style={styles.amountToBe}>{"Total Cost : "+completedOrders[item]["totalAmount"]}</Text>
+            <View style={styles.statusBar}> 
+                <TouchableOpacity
+                disabled="true">
+                    <View style={styles.completeBox}>
+                        <Text style={styles.completeText}>ORDER COMPLETED</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+        </View>
+    };
+
     return <ScrollView 
         nestedScrollEnabled={false}
         showsVerticalScrollIndicator={false}
@@ -144,7 +176,7 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         }
         {
             completedOrdersList==null ||
-            (orderType==1 && completedOrdersList.map(_renderIncompleteItem))
+            (orderType==1 && completedOrdersList.map(_renderCompletedItem))
         }
     </ScrollView>
 }
@@ -165,6 +197,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         margin: "2%",
         textAlign: 'center'
+    },
+    pickupText : {
+        fontWeight: 'bold',
+        fontSize: 18,
+        margin: "2%",
+        alignSelf: 'center'
     },
     pickupDate : {
         fontWeight: 'bold',
@@ -197,11 +235,22 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: 'space-around'
     },
-    statusBox :{
+    completeBox : {
         backgroundColor: "#BFE9B5"
+    },
+    statusBox :{
+        backgroundColor: "#F0F3AA"
     },
     cancelBox : {
         backgroundColor: "#FCA19C"
+    },
+    completeText : {
+        fontSize: 15,
+        textTransform: 'uppercase',
+        margin: '5%',
+        alignSelf: 'center',
+        fontWeight: 'bold',
+        color: "#14760F"
     },
     statusText : {
         fontSize: 15,
@@ -209,7 +258,7 @@ const styles = StyleSheet.create({
         margin: '5%',
         alignSelf: 'center',
         fontWeight: 'bold',
-        color: "#14760F"
+        color: "#A79A1C"
     },
     cancelText : {
         fontSize: 15,
