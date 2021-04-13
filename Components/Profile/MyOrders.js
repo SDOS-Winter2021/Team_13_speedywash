@@ -16,6 +16,7 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
     const [incompleteOrdersList, setIncompleteOrdersList] = useState(null);
     const [completedOrdersList, setCompletedOrdersList] = useState(null);
     const [Order, setOrder] = useState({});
+
     useEffect(() => {
         firebase.firestore().collection("incompleteOrders").doc(currentUser.uid).get().then((record) => {
             console.log("Incompleted Orders Requested");
@@ -38,7 +39,8 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
     }, [])
     
     
-    console.log(incompleteOrdersList);
+
+    //console.log(incompleteOrdersList);
     function TopBar(){
         return <View style={styles.topBar}>
         <TouchableOpacity 
@@ -60,11 +62,41 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
     </View>
     }
 
+    const onConfirmedDelete = (item) =>{
+        //console.log("Delete confirmed");
+        
+        const temp = {...incompleteOrders};
+        delete temp[item];
+        setIncompleteOrdersList(Object.keys(temp));
+        setIncompleteOrders(temp);
+        firebase.firestore()
+        .collection("incompleteOrders").doc(currentUser.uid).set(temp);
+    };
 
+    const onClickCancel = (item) => {
+        Alert.alert(
+            "Confirm Cancellation",
+            "Are you sure you want to delete this order?",
+            [
+                {
+                    text: "Confirm",
+                    onPress: () => { onConfirmedDelete(item) },
+                    style: "cancel"
+                },
+                {
+                    text: "Dismiss",
+                    style: "destructive"
+                }
+            ]
+        );
+
+    };
 
     const _renderIncompleteItem = (item) => {
         // Below statement will be required while using FlatList and input will be 'element'
         // const item=element.item;
+        
+        // return <View><Text>djhf</Text><Button title="kdjf" onPress={()=>{onClickCancel(item)}}></Button></View>
         pickupDate = incompleteOrders[item]["pickUpDate"].toDate();
         return <View style={styles.outerBox} key={item}> 
 
@@ -88,10 +120,11 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
                 <TouchableOpacity
                 disabled="true">
                     <View style={styles.statusBox}>
-                        <Text style={styles.statusText}>Pickup Pending</Text>
+                        <Text style={styles.statusText}>{incompleteOrders[item]["orderStatus"]["message"]}</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity
+                onPress={()=>{ onClickCancel(item) }}>
                     <View style={styles.cancelBox}>
                         <Text style={styles.cancelText}>CANCEL ORDER</Text>
                     </View>
@@ -204,11 +237,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#C8C6C6",
         flex: 0.5,
         justifyContent: 'center'
-    },
-    homeScreen: {
-        backgroundColor: keys.colors.HOMEBACKGROUND,
-        flex: 1,
-        width: '100%'
     }
 });
 export default MyOrders
