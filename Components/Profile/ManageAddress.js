@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import React, { useState } from 'react'
 import { Text, View, Button, TextInput } from 'react-native'
 import keys from "../../configs/KEYS"
@@ -11,11 +14,21 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { getValue } from "../../configs/CacheManager"
 import CurrentLocationPicker from "../CurrentLocationPicker/CurrentLocationPicker"
 import { Alert } from 'react-native';
-
+/**
+ * Parses the location object and converts to a single location string
+ * @param {module:globaltypes.Location} location - Current Fetched Location from GPS
+ */
 function parseLocation(location) {
-    return `${location.name == null ? '' : location.name} ${location.steet == null ? '' : location.street} ${location.district == null ? '' : location.district} ${location.city == null ? '' : location.city} ${location.postalCode == null ? '' : location.postalCode} ${location.subregion == null ? '' : location.subregion} ${location.region == null ? '' : location.region} ${location.country == null ? '' : location.country}`
+    return `${location.name == null ? '' : location.name} ${location.street == null ? '' : location.street} ${location.district == null ? '' : location.district} ${location.city == null ? '' : location.city} ${location.postalCode == null ? '' : location.postalCode} ${location.subregion == null ? '' : location.subregion} ${location.region == null ? '' : location.region} ${location.country == null ? '' : location.country}`
 }
 
+/**
+ * Drop-down menu to select one of the address home, office or other and edit them
+ * @param {Object} obj - An object
+ * @param {string} obj.currentAddresses - current user address for corresponding selected Address
+ * @param {string} obj.selectedAddress - current selected address slot could be any one ["home", "office", "other"]
+ * @param {function} obj.setSelectedAddress - selected Address setter
+ */
 function AddressUpdater({ currentAddresses, selectedAddress, setSelectedAddress }) {
     const slots = ["home", "office", "other"]
     return <Picker mode="dropdown" selectedValue={selectedAddress} onValueChange={(itemValue) => {
@@ -24,7 +37,14 @@ function AddressUpdater({ currentAddresses, selectedAddress, setSelectedAddress 
         {slots.map((item) => <Picker.Item key={item} label={item} value={item} />)}
     </Picker>
 }
-
+/**
+ * Allows user to select address slot, edit and update address in database also (abstracted)
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setcurrentUser - current user setter
+ * @param {function} obj.setcurrentView - set current visible/selected view
+ * @returns {View} - React Coponent View
+ */
 function ManageAddress({ currentUser, setcurrentUser, setcurrentView }) {
     const [currentAddresses, setcurrentAddresses] = useState({
         home: currentUser.home,

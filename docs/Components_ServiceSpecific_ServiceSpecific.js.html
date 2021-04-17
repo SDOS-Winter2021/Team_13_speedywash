@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/ServiceSpecific/ServiceSpecific.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/ServiceSpecific/ServiceSpecific.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+import React, { useEffect } from 'react'
+import { ScrollView } from 'react-native';
+import { Button } from 'react-native';
+import { Text, View} from 'react-native'
+import ServiceItem from '../serviceitem';
+import styles from './styles';
+import keys from "../../configs/KEYS";
+import { getValue, removeValue, setValue,cleanCache} from "../../configs/CacheManager";
+/**
+ * Responsible for rendering Service specific page which opens once user select any service
+ * @param {Object} obj - An object
+ * @param {Object} obj.data - Currently present in cart
+ * @param {string} obj.serviceSelected - Currently selected service string
+ * @param {function} obj.setServiceSelected - Currently selected service string setter
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setcurrentUser - current user setter
+ * @param {function} [obj.cartItemsAndPriceUpdater] - current cart items price updater
+ * @returns {View} - React Component View
+ */
+function ServiceSpecific({ data, serviceSelected, setServiceSelected, currentUser, setcurrentUser, cartItemsAndPriceUpdater }){
+   
+
+    const service = {
+        heading: serviceSelected,
+        list_of_titles: Object.keys(data),
+        list_of_items: [],
+        list_of_prices: [],
+        list_of_units: [],
+    };
+    for(var i = 0;i&lt;service.list_of_titles.length;i++)
+    {
+        var currTitle = service.list_of_titles[i]
+        var Items = Object.keys(data[currTitle]);
+        service.list_of_items.push([])
+        service.list_of_prices.push([])
+        service.list_of_units.push([])
+        
+        for(var j=0;j&lt;Items.length;j++)
+        {
+            var currItem = Items[j];
+            service.list_of_items[service.list_of_items.length-1].push(currItem)
+            service.list_of_prices[service.list_of_prices.length-1].push(data[currTitle][currItem].price)
+            service.list_of_units[service.list_of_units.length-1].push(data[currTitle][currItem].unit)
+        }
+    }
+  
+    return (
+        &lt;View>
+            &lt;View style={styles.button}>
+            {setServiceSelected!=null &amp;&amp;
+                &lt;Button title="Go Back" onPress={() => setServiceSelected(null)}  />
+            }
+            &lt;/View>
+           
+            &lt;View style = {styles.scroll}>
+            &lt;ServiceItem
+                cartItemsAndPriceUpdater={cartItemsAndPriceUpdater}
+                heading={service.heading}
+                list_of_titles={service.list_of_titles}
+                list_of_items={service.list_of_items}
+                list_of_prices={service.list_of_prices}>
+            &lt;/ServiceItem>
+            &lt;/View>
+        &lt;/View>
+    )
+}
+
+export default ServiceSpecific
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Profile/ManageAddress.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Profile/ManageAddress.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+import React, { useState } from 'react'
+import { Text, View, Button, TextInput } from 'react-native'
+import keys from "../../configs/KEYS"
+import * as firebase from 'firebase';
+import { StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-community/async-storage';
+import { getValue } from "../../configs/CacheManager"
+import CurrentLocationPicker from "../CurrentLocationPicker/CurrentLocationPicker"
+import { Alert } from 'react-native';
+/**
+ * Parses the location object and converts to a single location string
+ * @param {module:globaltypes.Location} location - Current Fetched Location from GPS
+ */
+function parseLocation(location) {
+    return `${location.name == null ? '' : location.name} ${location.street == null ? '' : location.street} ${location.district == null ? '' : location.district} ${location.city == null ? '' : location.city} ${location.postalCode == null ? '' : location.postalCode} ${location.subregion == null ? '' : location.subregion} ${location.region == null ? '' : location.region} ${location.country == null ? '' : location.country}`
+}
+
+/**
+ * Drop-down menu to select one of the address home, office or other and edit them
+ * @param {Object} obj - An object
+ * @param {string} obj.currentAddresses - current user address for corresponding selected Address
+ * @param {string} obj.selectedAddress - current selected address slot could be any one ["home", "office", "other"]
+ * @param {function} obj.setSelectedAddress - selected Address setter
+ */
+function AddressUpdater({ currentAddresses, selectedAddress, setSelectedAddress }) {
+    const slots = ["home", "office", "other"]
+    return &lt;Picker mode="dropdown" selectedValue={selectedAddress} onValueChange={(itemValue) => {
+        setSelectedAddress(itemValue)
+    }}>
+        {slots.map((item) => &lt;Picker.Item key={item} label={item} value={item} />)}
+    &lt;/Picker>
+}
+/**
+ * Allows user to select address slot, edit and update address in database also (abstracted)
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setcurrentUser - current user setter
+ * @param {function} obj.setcurrentView - set current visible/selected view
+ * @returns {View} - React Coponent View
+ */
+function ManageAddress({ currentUser, setcurrentUser, setcurrentView }) {
+    const [currentAddresses, setcurrentAddresses] = useState({
+        home: currentUser.home,
+        office: currentUser.office,
+        other: currentUser.other
+    })
+    const [selectedAddress, setSelectedAddress] = useState("home");
+    const [location, setlocation] = useState(null)
+    const [numericalLocationObject, setNumericalLocationObject] = useState(null)
+    // const addressList = [
+    //     {
+    //         id: "1",
+    //         name: "Home",
+    //         state: "New Delhi",
+    //         address: "G-3, Milap Nagar, Uttam Nagar",
+    //         pincode: "110059"
+
+    //     },
+    //     {
+    //         id: "2",
+    //         name: "Work",
+    //         state: "New Delhi",
+    //         address: "Boys hostel, IIITD, Okhla,",
+    //         pincode: "110020"
+    //     },
+    //     {
+    //         id: "3",
+    //         name: "Work",
+    //         state: "New Delhi",
+    //         address: "Boys hostel, IIITD, Okhla,",
+    //         pincode: "110020"
+    //     }
+    // ]
+    // const [addresses,setAddress] = useState(addressList);
+
+    // function deleteAddress(curr_id){
+    //     if(addresses.length == 1){
+    //         Alert.alert("Atleast one address required") ;
+    //     }
+    //     else{
+    //         setAddress(addresses.filter((item) => (item.id != curr_id)))
+    //     }
+    // }
+
+    // function _renderAddress(curr_address) {
+    //     return (
+    //         &lt;View style={styles.card}>
+    //             &lt;View >
+    //                 &lt;Text style={styles.cardText}>
+    //                     {curr_address.name}
+    //                 &lt;/Text>
+    //                 &lt;Text style={styles.cardText}>
+    //                     {curr_address.address}
+    //                 &lt;/Text>
+    //                 &lt;Text style={styles.cardText}>
+    //                     {curr_address.state}
+    //                 &lt;/Text>
+    //                 &lt;Text style={styles.cardText}> 
+    //                     {curr_address.pincode}
+    //                 &lt;/Text>
+    //             &lt;/View> 
+    //             &lt;TouchableOpacity style={styles.icons} onPress={()=>deleteAddress(curr_address.id)}>
+    //                 &lt;MaterialIcons style={styles.cardImage} name='delete' size={30} color={'grey'}/>  
+    //             &lt;/TouchableOpacity>  
+    //         &lt;/View>);
+    // }   
+
+    function updateAddress() {
+        if (currentAddresses.home.trim() == "") {
+            Alert.alert("Empty Address", "Home Address Must not be empty")
+            return;
+        }
+        firebase.firestore().collection("users").doc(currentUser.uid).update({
+            ...currentAddresses
+        }).then(() => {
+            AsyncStorage.setItem(keys.storage.USER, JSON.stringify({ ...currentUser, ...currentAddresses }))
+                .then(() => {
+                    AsyncStorage.getItem(keys.storage.USER)
+                        .then((value) => {
+                            setcurrentUser(JSON.parse(value))
+                            Alert.alert("Success", "Address Updated Successfully")
+                            setcurrentView({ screen: keys.screens.PROFILE, header: true, footer: true })
+                        })
+                })
+        })
+    }
+
+    function LiveLocationSetter(newLocation){
+        if(newLocation!=null)
+        {
+            setlocation(newLocation)
+            setcurrentAddresses((prev)=>({
+                ...prev,
+                [selectedAddress]: parseLocation(newLocation)
+            }))
+        }
+    }
+
+    return (
+        &lt;View style={styles.homeScreen}>
+            {/* &lt;Text
+                style={styles.ManageAddressTitle}>
+                Manage Address
+            &lt;/Text> 
+            &lt;SafeAreaView style={{ flex: 1, marginBottom: 15 }}>
+                {
+                    addresses.map(_renderAddress)
+                }
+            &lt;/SafeAreaView>
+            &lt;SafeAreaView style={styles.container}>
+                &lt;View style={styles.submitButton}>
+                    &lt;Button onPress={()=>setcurrentView({screen: keys.screens.PROFILE, header: true, footer: true})} title="Go Back"/>
+                    &lt;Button onPress={()=> addresses.length == 3 ? Alert.alert("Address limit reached") : 
+                        setcurrentView({screen: keys.screens.ADDADDRESS, header: true, footer: true})} 
+                        title="Add Address" />
+                &lt;/View>
+            &lt;/SafeAreaView> */}
+            &lt;View style={styles.subView}>
+                &lt;AddressUpdater currentAddresses={currentAddresses} selectedAddress={selectedAddress} setSelectedAddress={setSelectedAddress} />
+
+                &lt;TextInput
+                    autoFocus
+                    style={styles.addressField}
+                    value={currentAddresses[selectedAddress]}
+                    onChangeText={(text) => setcurrentAddresses((prev) => ({ ...prev, [selectedAddress]: text }))}
+                    multiline={true} />
+                &lt;CurrentLocationPicker setLocation={LiveLocationSetter} setNumericalLocationObject={setNumericalLocationObject} />
+
+                &lt;View style={styles.ButtonView}>
+                    &lt;Button title={"Update"} onPress={updateAddress} />
+                &lt;/View>
+                &lt;View style={styles.ButtonView}>
+                    &lt;Button onPress={() => setcurrentView({ screen: keys.screens.PROFILE, header: true, footer: true })} title="Go Back" />
+                &lt;/View>
+            &lt;/View>
+
+        &lt;/View>
+    );
+}
+
+const styles = StyleSheet.create({
+    ButtonView: {
+        marginVertical: 10,
+    },
+    subView: {
+        textAlign: 'center',
+        margin: 20,
+    },
+    addressField: {
+        fontSize: 15,
+        marginBottom: 20
+        // textAlign: 'center',
+        // margin: 20
+    },
+    homeScreen: {
+        backgroundColor: keys.colors.HOMEBACKGROUND,
+        flex: 1,
+        width: '100%'
+    },
+    ManageAddressTitle: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 25,
+        marginBottom: 10,
+        color: keys.colors.MAIN,
+        marginVertical: '2%'
+    },
+
+    icons: {
+        alignSelf: 'center'
+    },
+
+    card: {
+        backgroundColor: "white",
+        width: '92%',
+        height: "25%",
+        borderStyle: 'solid',
+        borderWidth: 1,
+        marginHorizontal: '4%',
+        borderRadius: 15,
+        marginBottom: "2%",
+        marginTop: "2%",
+        flexDirection: 'row',
+        alignSelf: 'center',
+        alignItems: 'center',
+
+    },
+    cardImage: {
+        alignSelf: 'flex-end',
+        marginBottom: '4%',
+        justifyContent: 'flex-end'
+    },
+    cardText: {
+        textAlign: 'left',
+        textAlignVertical: 'center',
+        fontSize: 18,
+        color: keys.colors.MAIN,
+        padding: "1%",
+        paddingHorizontal: '5%',
+        marginHorizontal: "1%",
+
+    },
+    submitButton: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        width: '46%',
+        height: undefined,
+        aspectRatio: 1 / 0.185,
+        fontSize: 18,
+        marginHorizontal: '4%',
+        marginVertical: '1%',
+
+    },
+});
+export default ManageAddress
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

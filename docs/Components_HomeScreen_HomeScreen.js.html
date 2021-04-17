@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/HomeScreen/HomeScreen.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/HomeScreen/HomeScreen.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+import React, { useState, useEffect } from 'react'
+import { ScrollView } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
+import { Text, View, FlatList } from 'react-native'
+import keys from "../../configs/KEYS"
+import * as firebase from 'firebase';
+import 'firebase/firestore';
+import { getValue, removeValue, setValue } from "../../configs/CacheManager"
+import ServiceSpecific from "../ServiceSpecific/ServiceSpecific"
+
+/**
+ * Renders HomeScreen View
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.VisibleView} obj.currentView - current visible/selected view
+ * 
+ * @returns {View} - React Componnent View
+ */
+function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }) {
+
+    /*
+        Stores the list of all services that are to be displayed onto the homepage
+    */
+    const [services, setServices] = useState([]);
+    /*
+        Contains whole pricelist
+    */
+    const [wholeDataObject, setWholeDataObject] = useState(null);
+    /*
+        Stores currently selected service (null if none is selected)
+    */
+    const [serviceSelected, setServiceSelected] = useState(null);
+
+    /*
+        Check If the prices value is present in local device cache
+        If present and not expired then use those values
+        If not present then fetch the latest price values from the database 
+        and store them into cache for 1 day
+    */
+    useEffect(() => {
+        getValue(keys.storage.HOMEPAGE_DATA).then((value) => {
+            if (value == null) {
+                firebase.firestore().collection("homepage").doc("data").get().then((record) => {
+                    console.log("Requested")
+                    if (record &amp;&amp; record.data()) {
+                        setServices(Object.keys(record.data()));
+                        setValue(keys.storage.HOMEPAGE_DATA, record.data(), keys.time.DAY);
+                        setWholeDataObject(record.data())
+                    }
+                })
+            }
+            else {
+                setServices(Object.keys(value))
+                setWholeDataObject(value)
+            }
+        })
+    }, [])
+
+    const _renderItem = (item) => {
+        // Below statement will be required while using FlatList and input will be 'element'
+        // const item=element.item;
+        return &lt;View style={styles.serviceListItem}
+            /* key won't be required while using FlatList*/
+            key={item}>
+            &lt;TouchableOpacity
+                onPress={() => setServiceSelected(item)}
+                style={styles.listItemTouchable}>
+                &lt;View style={{ flex: 0.4 }}>
+                    &lt;Image resizeMode="contain" style={styles.serviceImage} source={require("../../assets/favicon.png")} />
+                &lt;/View>
+                &lt;View style={{ flex: 0.6 }}>
+                    &lt;Text style={styles.ServiceNameStyle}>{item}&lt;/Text>
+                &lt;/View>
+            &lt;/TouchableOpacity>
+        &lt;/View>
+    };
+
+    const _keyExtractor = (item) => {
+        return item;
+    };
+
+    /*
+        Render main screen if none service is selected
+        If some screen is selected then render service specific page
+    */
+    return (
+        serviceSelected == null ? &lt;ScrollView
+            nestedScrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            style={styles.homeScreen}>
+            &lt;View style={styles.marketingArea}>
+                &lt;Image resizeMode="contain"
+                    style={styles.marketingImage}
+                    source={require('./marketing.jpg')} />
+            &lt;/View>
+            &lt;Text
+                style={styles.selectServiceTitle}>
+                Select Service
+            &lt;/Text>
+            &lt;SafeAreaView style={{ flex: 1, marginBottom: 15 }}>
+                {/* &lt;FlatList
+                    showsVerticalScrollIndicator={false}
+                    data={services} 
+                    renderItem={_renderItem} 
+                    keyExtractor={_keyExtractor}>
+                &lt;/FlatList> */}
+                {
+                    services.map(_renderItem)
+                }
+            &lt;/SafeAreaView>
+        &lt;/ScrollView> :
+            &lt;ServiceSpecific data={wholeDataObject[serviceSelected]} serviceSelected={serviceSelected} setServiceSelected={setServiceSelected} currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />
+    )
+}
+const styles = StyleSheet.create({
+    homeScreen: {
+        backgroundColor: keys.colors.HOMEBACKGROUND,
+        flex: 1,
+        width: '100%'
+    },
+    marketingImage: {
+        width: '100%',
+        height: undefined,
+        aspectRatio: 1 / 0.7
+    },
+    marketingArea: {
+        margin: '5%',
+        marginTop: "10%",
+        backgroundColor: '#000000'
+    },
+    selectServiceTitle: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 25,
+        marginBottom: 10,
+        color: keys.colors.MAIN
+    },
+    serviceListItem: {
+        backgroundColor: 'white',
+        width: '92%',
+        height: undefined,
+        aspectRatio: 1 / 0.2,
+        marginHorizontal: '4%',
+        marginVertical: '1.5%',
+        borderRadius: 7
+    },
+    listItemTouchable: {
+        flexDirection: 'row',
+        justifyContent: "space-evenly"
+    },
+    serviceImage: {
+        alignSelf: 'center',
+        margin: '10%'
+    },
+    ServiceNameStyle: {
+        fontSize: 20,
+        alignSelf: 'center',
+        margin: '10%'
+    }
+});
+export default HomeScreen
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

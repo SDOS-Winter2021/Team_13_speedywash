@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import React from 'react'
 import { Text, View, Button, TextInput } from 'react-native'
 import keys from "../../configs/KEYS"
@@ -9,6 +12,15 @@ import { TouchableOpacity } from 'react-native';
 import { FontAwesome5, MaterialIcons, AntDesign } from '@expo/vector-icons';
 import { Modal, Dimensions } from "react-native";
 
+
+/**
+ * Adds Address 
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setCurrentUser - current user setter
+ * @param {function} obj.setcurrentView - current view setter
+ * @return {View} - React Component View
+*/
 function AddAddress({ currentUser, setcurrentUser, setcurrentView }) {
     const services = [
         {

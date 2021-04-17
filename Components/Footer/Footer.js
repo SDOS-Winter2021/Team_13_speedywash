@@ -1,12 +1,18 @@
+/**
+ * @module
+ */
 import React from 'react'
 import { Text, View, StyleSheet, Button, TouchableOpacity } from 'react-native'
 import { FontAwesome5, MaterialIcons, AntDesign } from '@expo/vector-icons';
 import keys from "../../configs/KEYS"
 
-/*
-    * Code for footer is present here
-    * Three icons clicking on any of them updates the currentView.screen
-    * which in return updates whole parent view
+/**
+ * Code for footer is present here
+ * Three icons clicking on any of them updates the currentView.screen
+ * which in return updates whole parent view
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.VisibleView} obj.currentView - current visible/selected view
+ * @param {function} obj.setcurrentView - current view setter
 */
 function Footer({ currentView, setcurrentView }) {
     return (

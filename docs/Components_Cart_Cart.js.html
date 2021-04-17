@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Cart/Cart.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Cart/Cart.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+// import { stopLocationUpdatesAsync } from 'expo-location';
+import React, { useEffect, useState } from 'react'
+import { Text, View, ScrollView, TouchableOpacity } from 'react-native'
+import { getValue, setValue, removeValue } from '../../configs/CacheManager'
+import keys from '../../configs/KEYS'
+import ServiceSpecific from '../ServiceSpecific/ServiceSpecific.js';
+import styles from './styles.js';
+import SchedulePickup from "../SchedulePickup/SchedulePickup"
+
+/**
+ * Cart Component resposible for rendering Cart View,
+ * Allows to add/remove item from the cart, cart is stored in persistent storage
+ * i.e. even after reopening application the cart items will still be present
+ * Also, shows total amount to be payed
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.VisibleView} obj.currentView - current visible/selected view
+ * @param {function} obj.setcurrentView - current view setter
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setCurrentUser - current user setter
+ * @return {View} - React Component View
+ */
+function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
+    const [data, setData] = useState({});
+    var vdata = {}
+    const [total, setTotal] = useState(0);
+    const [proceed, setProceed] = useState(false);
+
+    function cartItemsAndPriceUpdater() {
+        getValue(keys.storage.CART).then((gotData) => {
+            if (gotData !== null) {
+                list_of_headings = Object.keys(gotData)
+                var price = 0
+                for (i = 0; i &lt; list_of_headings.length; i++) {
+                    list_of_titles = Object.keys(gotData[list_of_headings[i]])
+                    for (j = 0; j &lt; list_of_titles.length; j++) {
+                        list_of_types = Object.keys(gotData[list_of_headings[i]][list_of_titles[j]])
+                        for (k = 0; k &lt; list_of_types.length; k++) {
+                            price += gotData[list_of_headings[i]][list_of_titles[j]][list_of_types[k]].countitem * gotData[list_of_headings[i]][list_of_titles[j]][list_of_types[k]].price;
+                        }
+                    }
+                }
+                setData(gotData)
+                setTotal(price)
+            }
+        })
+    }
+
+    useEffect(() => {
+        cartItemsAndPriceUpdater()
+    }, [])
+
+    return (
+        proceed == true ?
+            &lt;View>&lt;SchedulePickup setcurrentView={setcurrentView} currentUser={currentUser} data={data} amount={total} />&lt;/View> :
+            &lt;View style={styles.bigcontainer}>
+                &lt;ScrollView style={styles.container}>
+                    &lt;View style={styles.allservices}>
+                        {data != null &amp;&amp; Object.keys(data).map((item, key) => {
+                            return (&lt;View key={key} style={styles.services}>
+                                &lt;ServiceSpecific cartItemsAndPriceUpdater={cartItemsAndPriceUpdater} data={data[item]} serviceSelected={item} currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />
+                            &lt;/View>
+                            )
+                        })}
+                        {data == null &amp;&amp; &lt;View>&lt;Text>CART IS EMPTY&lt;/Text>&lt;/View>}
+                    &lt;/View>
+                &lt;/ScrollView>
+                {&lt;TouchableOpacity onPress={() => {
+                    setProceed(true);
+                }} style={styles.total}>&lt;Text style={styles.totaltext}>Total Amount is {total}&lt;/Text>&lt;Text style={styles.totaltext}>(Click to Proceed)&lt;/Text>&lt;/TouchableOpacity>}
+            &lt;/View>
+    )
+}
+
+export default Cart
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

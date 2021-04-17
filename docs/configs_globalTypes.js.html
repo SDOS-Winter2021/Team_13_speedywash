@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: configs/globalTypes.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: configs/globalTypes.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module globaltypes
+ */
+
+/**
+ * A user
+ * @typedef module:globaltypes.User
+ * @type {Object}
+ * @property {Date} creationTime - Account creation time
+ * @property {string} displayName - user display name
+ * @property {string} email - user email
+ * @property {string} home - home address
+ * @property {string} office - office address
+ * @property {string} other - other address
+ * @property {string} phoneNumber - user's contact number
+ * @property {string} uid - unique user identifier
+*/
+
+/**
+ * Currently Selected and visible screen object
+ * @typedef module:globaltypes.VisibleView
+ * @type {Object}
+ * @property {string} screen - Currently Visible screen-name, currently selected screen
+ * @property {boolean} header - header visibility
+ * @property {boolean} footer - footer visibility
+*/
+
+/**
+ * A location object (fetched from gps)
+ * @typedef module:globaltypes.Location
+ * @type {Object}
+ * @property {string} name - Current location name
+ * @property {string} street - Current location street
+ * @property {string} district - Current location district
+ * @property {string} city - Current location city
+ * @property {string} postalCode - Current location postal-code
+ * @property {string} subregion - Current location sub-region
+ * @property {string} region - Current location region
+ * @property {string} country - Current location country
+ *
+*/
+
+/**
+ * An order object
+ * @typedef module:globaltypes.Order
+ * @type {Object}
+ * @property {string} uid - current user's uid
+ * @property {string} displayName - current user's displayName,
+ * @property {string} phoneNumber - current user's phoneNumber,
+ * @property {Object} orderItems - ordered items,
+ * @property {string} pickUpAddress - pickup address,
+ * @property {Date} pickUpDate - scheduled pickup date,
+ * @property {string} pickUpTimeSlot - scheduled pickup time slot,
+ * @property {Date} orderTime - order placing time,
+ * @property {string} orderTimeString - order placing time string,
+ * @property {string} addressLabel - selected slot address,
+ * @property {Number} totalAmount - order amount,
+ * @property {Number} pickUpTimeSlotStart - pickup time slot starting,
+ * @property {Number} pickUpTimeSlotEnd - pickup time slot ending,
+ * @property {Object} orderStatus - orderstatus object,
+ * @property {string} oid - order id hash of concatenated uid and orderTimeString
+*/
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

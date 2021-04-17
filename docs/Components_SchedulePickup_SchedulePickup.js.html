@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/SchedulePickup/SchedulePickup.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/SchedulePickup/SchedulePickup.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+import React, { useState } from 'react'
+import { View, Button, TouchableOpacity, Text, StyleSheet } from 'react-native'
+import RNDateTimePicker from "@react-native-community/datetimepicker"
+import { Picker } from '@react-native-picker/picker';
+import { Alert } from 'react-native';
+import { TextInput } from 'react-native';
+import keys from "../../configs/KEYS"
+import * as Crypto from 'expo-crypto';
+import * as firebase from 'firebase';
+import { removeValue } from "../../configs/CacheManager"
+
+/**
+ * Child of SchedulePickup, UI component that allows user to select, prefereable time slot for pickup of clothes
+ * @param {Object} obj - An object
+ * @param {string} obj.time - current selected pickup-time (default: 4-5 pm)
+ * @param {function} obj.setTime - current selected time setter
+*/
+function TimePickerList({ time, setTime }) {
+    const Slots = ["9 - 10 AM",
+        "10 - 11 AM",
+        "11 - 12 AM",
+        "12 - 1 PM",
+        "1 - 2 PM",
+        "2 - 3 PM",
+        "3 - 4 PM",
+        "4 - 5 PM"]
+
+    return &lt;Picker style={styles.picker} mode="dropdown" selectedValue={time} onValueChange={(itemValue, itemIndex) => { setTime(itemValue) }}>
+        {Slots.map((item) => &lt;Picker.Item key={item} label={item} value={item} />)}
+    &lt;/Picker>
+
+}
+
+/**
+ * Child of SchedulePickup, UI Component responsible 
+ * for allowing user to switch its address, Address is 
+ * only switchable if it has been added in manage address
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {string} obj.address - current selected address slot (default: "home")
+ * @param {function} obj.setAddress - current selected address slot setter
+ */
+function AddressPicker({ currentUser, address, setAddress }) {
+    const Slots = ["home", "office", "other"]
+    return &lt;View>
+        &lt;Picker style={styles.picker} mode="dropdown" selectedValue={address} onValueChange={(itemValue) => {
+            if (currentUser[itemValue] == "") {
+                Alert.alert("Address Not found", "Go to Profile -> Manage Address to Add address")
+                return;
+            }
+            setAddress(itemValue)
+        }}>
+            {Slots.map((item) => &lt;Picker.Item key={item} label={item} value={item} />)}
+        &lt;/Picker>
+        &lt;TextInput style={{ margin: 10, textAlign: 'center', fontSize: 15 }} editable={false} multiline={true} value={currentUser[address]} />
+    &lt;/View>
+}
+
+/**
+ * Father Component of this module, 
+ * Responsible for taking final information related to 
+ * placing order and updating the order placing information 
+ * into the database
+ * @param {Object} obj - An object
+ * @param {function} obj.setcurrentView - set current visible/selected view
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {Object} obj.data - current items that were present in cart
+ * @param {amount} obj.amount - total amount to be paid by the user
+ * @returns {View} - React Coponent View
+*/
+function SchedulePickup({ setcurrentView, currentUser, data, amount }) {
+    const [date, setDate] = useState(null)
+    const [time, setTime] = useState("4 - 5 PM")
+    const [address, setAddress] = useState("home")
+    const maxDate = new Date(new Date().setDate(new Date().getDate() + 7))
+    const [pickDate, setPickDate] = useState(false);
+    const [pressable, setPressable] = useState(true);
+
+    /** 
+     * This function is responsible for placing order order id is generated as an hash of concatenation of user id and orderTime string SHA1 is used for generating the hash This function also updates/pushes the order related information into the database
+     */
+    function placeOrder() {
+        setPressable(false)
+        const oTime = new Date()
+        Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA1, currentUser.uid + oTime.toString())
+            .then((hash) => {
+                /**
+                 * @type {module:globaltypes.Order}
+                 */
+                const orderInfo = {
+                    uid: currentUser.uid,
+                    displayName: currentUser.displayName,
+                    phoneNumber: currentUser.phoneNumber,
+                    orderItems: data,
+                    pickUpAddress: currentUser[address],
+                    pickUpDate: date,
+                    pickUpTimeSlot: time,
+                    orderTime: oTime,
+                    orderTimeString: oTime.toString(),
+                    addressLabel: address,
+                    totalAmount: amount,
+                    pickUpTimeSlotStart: parseInt(time.split(" ")[0]),
+                    pickUpTimeSlotEnd: parseInt(time.split(" ")[2]),
+                    orderStatus: keys.orderStatus.PLACED,
+                    oid: hash
+                }
+                firebase.firestore().collection("incompleteOrders").doc(currentUser.uid).get().then((record) => {
+                    if (record.exists) {
+                        firebase.firestore().collection("incompleteOrders").doc(currentUser.uid).update({
+                            [orderInfo.oid]: orderInfo
+                        }).then(() => {
+                            Alert.alert("Success", "Your order has been placed successfully, go to profile to see more details")
+                            removeValue(keys.storage.CART)
+                        }).then(() => {
+                            setcurrentView({
+                                screen: keys.screens.HOME,
+                                header: true,
+                                footer: true
+                            })
+                        })
+
+                    }
+                    else {
+                        firebase.firestore().collection("incompleteOrders").doc(currentUser.uid).set({
+                            [orderInfo.oid]: orderInfo
+                        }).then(() => {
+                            Alert.alert("Success", "Your order has been placed successfully, go to My orders to see more details")
+                            removeValue(keys.storage.CART)
+                        }).then(() => {
+                            setcurrentView({
+                                screen: keys.screens.HOME,
+                                header: true,
+                                footer: true
+                            })
+                        })
+                    }
+                })
+            })
+    }
+
+    return (
+        &lt;View style={styles.main}>
+            &lt;TouchableOpacity style={styles.touchable} onPress={() => { setPickDate(true) }} >
+                &lt;Text style={styles.dateText} >{date == null ? "Select Pickup Date" : date.toDateString()}&lt;/Text>
+            &lt;/TouchableOpacity>
+            {pickDate &amp;&amp; &lt;RNDateTimePicker minimumDate={new Date()} maximumDate={maxDate} value={date == null ? new Date() : date} onChange={(e, newSelectedDate) => { setPickDate(false); setDate(newSelectedDate) }} />}
+            &lt;TimePickerList time={time} setTime={setTime} />
+            &lt;AddressPicker currentUser={currentUser} address={address} setAddress={setAddress} />
+            &lt;Button title={"Place Order"} disabled={date == null || time == null || !pressable} onPress={placeOrder} />
+        &lt;/View>
+    )
+}
+
+const styles = StyleSheet.create({
+    main: {
+        textAlign: 'center',
+        justifyContent: "center",
+    },
+    touchable: {
+
+    },
+    picker: {
+        textAlign: 'center',
+        justifyContent: "center",
+        margin: 10,
+        borderRadius: 10,
+    },
+    dateText: {
+        textAlign: 'center',
+        justifyContent: "center",
+        margin: 10,
+    }
+})
+
+export default SchedulePickup
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

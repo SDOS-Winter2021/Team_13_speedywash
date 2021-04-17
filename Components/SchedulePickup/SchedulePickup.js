@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import React, { useState } from 'react'
 import { View, Button, TouchableOpacity, Text, StyleSheet } from 'react-native'
 import RNDateTimePicker from "@react-native-community/datetimepicker"
@@ -9,10 +12,11 @@ import * as Crypto from 'expo-crypto';
 import * as firebase from 'firebase';
 import { removeValue } from "../../configs/CacheManager"
 
-/*
-    Child of SchedulePickup
-    UI component that allows user to select 
-    prefereable time slot for pickup of clothes
+/**
+ * Child of SchedulePickup, UI component that allows user to select, prefereable time slot for pickup of clothes
+ * @param {Object} obj - An object
+ * @param {string} obj.time - current selected pickup-time (default: 4-5 pm)
+ * @param {function} obj.setTime - current selected time setter
 */
 function TimePickerList({ time, setTime }) {
     const Slots = ["9 - 10 AM",
@@ -29,11 +33,16 @@ function TimePickerList({ time, setTime }) {
     </Picker>
 
 }
-/*
-    Child of SchedulePickup
-    UI Component responsible for allowing user to switch it's address
-    <Address is only switchable if it has been added in manage address>
-*/
+
+/**
+ * Child of SchedulePickup, UI Component responsible 
+ * for allowing user to switch its address, Address is 
+ * only switchable if it has been added in manage address
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {string} obj.address - current selected address slot (default: "home")
+ * @param {function} obj.setAddress - current selected address slot setter
+ */
 function AddressPicker({ currentUser, address, setAddress }) {
     const Slots = ["home", "office", "other"]
     return <View>
@@ -48,14 +57,19 @@ function AddressPicker({ currentUser, address, setAddress }) {
         </Picker>
         <TextInput style={{ margin: 10, textAlign: 'center', fontSize: 15 }} editable={false} multiline={true} value={currentUser[address]} />
     </View>
-
-
 }
 
-/*
-    Father Component of this module
-    Responsible for taking final information related to placing order
-    and updating the order placing information into the database
+/**
+ * Father Component of this module, 
+ * Responsible for taking final information related to 
+ * placing order and updating the order placing information 
+ * into the database
+ * @param {Object} obj - An object
+ * @param {function} obj.setcurrentView - set current visible/selected view
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {Object} obj.data - current items that were present in cart
+ * @param {amount} obj.amount - total amount to be paid by the user
+ * @returns {View} - React Coponent View
 */
 function SchedulePickup({ setcurrentView, currentUser, data, amount }) {
     const [date, setDate] = useState(null)
@@ -65,17 +79,17 @@ function SchedulePickup({ setcurrentView, currentUser, data, amount }) {
     const [pickDate, setPickDate] = useState(false);
     const [pressable, setPressable] = useState(true);
 
-    /*
-        This function is responsible for placing order
-        order id is generated as an hash of concatenation of user id and orderTime string
-        SHA1 is used for generating the hash
-        This function also updates/pushes the order related information into the database
-    */
+    /** 
+     * This function is responsible for placing order order id is generated as an hash of concatenation of user id and orderTime string SHA1 is used for generating the hash This function also updates/pushes the order related information into the database
+     */
     function placeOrder() {
         setPressable(false)
         const oTime = new Date()
         Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA1, currentUser.uid + oTime.toString())
             .then((hash) => {
+                /**
+                 * @type {module:globaltypes.Order}
+                 */
                 const orderInfo = {
                     uid: currentUser.uid,
                     displayName: currentUser.displayName,

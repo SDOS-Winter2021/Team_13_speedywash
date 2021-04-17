@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import React, { useState } from 'react'
 import { View, TouchableOpacity, StyleSheet } from 'react-native'
 import { FontAwesome5 } from '@expo/vector-icons';
@@ -6,13 +9,17 @@ import * as Location from 'expo-location';
 import { Alert, Text } from 'react-native';
 
 
-/*
-    * This is an independent Componenent when rendered
-    * It will show a Location icon clicking upon which 
-    * the program will try to fetch user's current 
-    * location and will set that location using setter 
-    * functions that are expected to be provided by the 
-    * father componnent
+/**
+ * This is an independent Componenent when rendered
+ * It will show a Location icon clicking upon which 
+ * the program will try to fetch user's current 
+ * location and will set that location using setter 
+ * functions that are expected to be provided by the 
+ * father componnent
+ * @param {Object} obj - An object
+ * @param {function} obj.setLocation - current location setter
+ * @param {function} obj.setNumericalLocationObject - current location longitude and latitude setter
+ * @returns {View} - React Coponent View
 */
 function CurrentLocationPicker({ setLocation, setNumericalLocationObject }) {
     const [clicked, setClicked] = useState(false)

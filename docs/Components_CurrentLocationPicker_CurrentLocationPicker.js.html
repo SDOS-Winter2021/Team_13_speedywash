@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/CurrentLocationPicker/CurrentLocationPicker.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/CurrentLocationPicker/CurrentLocationPicker.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+import React, { useState } from 'react'
+import { View, TouchableOpacity, StyleSheet } from 'react-native'
+import { FontAwesome5 } from '@expo/vector-icons';
+import keys from "../../configs/KEYS"
+import * as Location from 'expo-location';
+import { Alert, Text } from 'react-native';
+
+
+/**
+ * This is an independent Componenent when rendered
+ * It will show a Location icon clicking upon which 
+ * the program will try to fetch user's current 
+ * location and will set that location using setter 
+ * functions that are expected to be provided by the 
+ * father componnent
+ * @param {Object} obj - An object
+ * @param {function} obj.setLocation - current location setter
+ * @param {function} obj.setNumericalLocationObject - current location longitude and latitude setter
+ * @returns {View} - React Coponent View
+*/
+function CurrentLocationPicker({ setLocation, setNumericalLocationObject }) {
+    const [clicked, setClicked] = useState(false)
+
+    if(!setLocation || !setNumericalLocationObject)
+        return &lt;Text>Setter not passed&lt;/Text>
+
+    function getLocation() {
+        if (clicked == false) {
+            setClicked(true);
+            Location.requestPermissionsAsync()
+                .then(({ status }) => {
+                    if (status !== "granted") {
+                        Alert("Error", "Access Denied")
+                        setClicked(false)
+                    }
+                    else {
+                        Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.BestForNavigation })
+                            .then((result) => {
+                                setNumericalLocationObject(result)
+                                Location.reverseGeocodeAsync(result.coords)
+                                    .then((localeData) => {
+                                        console.log(localeData[0])
+                                        setLocation(localeData[0])
+                                        setClicked(false)
+                                    })
+                                    .catch((err) => {
+                                        Alert("Error", `${err}`)
+                                        setClicked(false)
+                                    })
+                            })
+                            .catch((err) => {
+                                setClicked(false);
+                                Alert("Error", `${err}`)
+                            })
+                    }
+                })
+                .catch((err) => {
+                    setClicked(false);
+                    Alert("Error", `${err}`)
+                });
+        }
+    }
+
+    return (
+        &lt;View>
+            &lt;TouchableOpacity onPress={getLocation}>
+                &lt;FontAwesome5 name="map-marker-alt" size={32} color={clicked == false ? keys.colors.FOOTER_NORMAL : keys.colors.HIGHLIGHT} />
+            &lt;/TouchableOpacity>
+        &lt;/View>
+    )
+}
+
+const styles = StyleSheet.create({
+
+})
+
+export default CurrentLocationPicker
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

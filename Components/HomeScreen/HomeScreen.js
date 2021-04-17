@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import React, { useState, useEffect } from 'react'
 import { ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
@@ -10,6 +13,13 @@ import 'firebase/firestore';
 import { getValue, removeValue, setValue } from "../../configs/CacheManager"
 import ServiceSpecific from "../ServiceSpecific/ServiceSpecific"
 
+/**
+ * Renders HomeScreen View
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.VisibleView} obj.currentView - current visible/selected view
+ * 
+ * @returns {View} - React Componnent View
+ */
 function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }) {
 
     /*

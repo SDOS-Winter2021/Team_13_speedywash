@@ -1,3 +1,7 @@
+/**
+ * @module
+ */
+
 import React, { useState } from 'react'
 import keys from "../../configs/KEYS"
 import { Text, View, StyleSheet, ScrollView, Button } from 'react-native'
@@ -14,15 +18,17 @@ import AddAddress from '../Profile/AddAddress'
 import MyOrders from '../Profile/MyOrders'
 // import ServiceSpecific from '../ServiceSpecific/ServiceSpecific'
 
-/* 
-    * This is the stage selecter function
-    * Add new switchable screen here, name of screens are stored in KEYS.js
-    * Redirecting to correct sub-screen is responsibility of that screen itself
-    * All the sub-screens (nested screens) should be handled there it self example: all screens that are nested below homepage should be present in Homepage directory
-    * currentUser: store  information of current Logged in User
-    * setCurrentUser: store information of current logged in user example: on logout changeit to null
-    * currentView: information about current screen that is visible to the user
-    * setcurrentView: update the current screen that is visible to the user
+/** 
+ * This is the stage selecter function
+ * Add new switchable screen here, name of screens are stored in KEYS.js
+ * Redirecting to correct sub-screen is responsibility of that screen itself
+ * All the sub-screens (nested screens) should be handled there it self example: all screens that are nested below homepage should be present in Homepage directory
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setCurrentUser - current user setter
+ * @param {module:globaltypes.VisibleView} obj.currentView - current visible/selected view
+ * @param {function} obj.setcurrentView - current view setter
+ * @return {View} - React Component View
 */
 function SwitchView({ currentView, setcurrentView, currentUser, setcurrentUser }) {
     switch (currentView.screen) {
@@ -49,11 +55,14 @@ function SwitchView({ currentView, setcurrentView, currentUser, setcurrentUser }
     }
 }
 
-/*
-    * Generic Layout consist of Two main components
-    * Swtichable View which could be any of the one {HomeScreen, Subscription, Profile}
-    * Footer can be used to select any of the above view
-    * change currentView.footer: false in order to hide footer, screen size will adjust automatically
+/**
+ * Generic Layout consist of Two main components
+ * Swtichable View which could be any of the one {HomeScreen, Subscription, Profile}
+ * Footer can be used to select any of the above view
+ * change currentView.footer: false in order to hide footer, screen size will adjust automatically
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setCurrentUser - current user setter
 */
 function GenericLayout({ currentUser, setcurrentUser }) {
     const [currentView, setcurrentView] = useState({
