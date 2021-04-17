@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import React, { useEffect } from 'react'
 import { ScrollView } from 'react-native';
 import { Button } from 'react-native';
@@ -6,7 +9,17 @@ import ServiceItem from '../serviceitem';
 import styles from './styles';
 import keys from "../../configs/KEYS";
 import { getValue, removeValue, setValue,cleanCache} from "../../configs/CacheManager";
-
+/**
+ * Responsible for rendering Service specific page which opens once user select any service
+ * @param {Object} obj - An object
+ * @param {Object} obj.data - Currently present in cart
+ * @param {string} obj.serviceSelected - Currently selected service string
+ * @param {function} obj.setServiceSelected - Currently selected service string setter
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setcurrentUser - current user setter
+ * @param {function} [obj.cartItemsAndPriceUpdater] - current cart items price updater
+ * @returns {View} - React Component View
+ */
 function ServiceSpecific({ data, serviceSelected, setServiceSelected, currentUser, setcurrentUser, cartItemsAndPriceUpdater }){
    
 

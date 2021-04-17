@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import React, { useEffect, useState } from 'react'
 import { Text, View, Button, TextInput } from 'react-native'
 import keys from "../../configs/KEYS"
@@ -9,6 +12,16 @@ import { TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { setValue } from "../../configs/CacheManager";
 
+/**
+ * Allows user to edit his/her displayName, email
+ * and upload his/her profile image. All the changes are also 
+ * commited to database as well
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setCurrentUser - current user setter
+ * @param {function} obj.setcurrentView - current view setter
+ * @return {View} - React Component View
+*/
 function EditProfile({ currentUser, setcurrentUser, setcurrentView }) {
 
     const [avatarName, setavatarname] = useState(currentUser.displayName);

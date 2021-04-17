@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Profile/EditProfile.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Profile/EditProfile.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+import React, { useEffect, useState } from 'react'
+import { Text, View, Button, TextInput } from 'react-native'
+import keys from "../../configs/KEYS"
+import AsyncStorage from '@react-native-community/async-storage';
+import * as firebase from 'firebase';
+import { Image, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { setValue } from "../../configs/CacheManager";
+
+/**
+ * Allows user to edit his/her displayName, email
+ * and upload his/her profile image. All the changes are also 
+ * commited to database as well
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setCurrentUser - current user setter
+ * @param {function} obj.setcurrentView - current view setter
+ * @return {View} - React Component View
+*/
+function EditProfile({ currentUser, setcurrentUser, setcurrentView }) {
+
+    const [avatarName, setavatarname] = useState(currentUser.displayName);
+    const [userDetails, setUserDetails] = useState({
+        name: currentUser.displayName,
+        email: currentUser.email
+    });
+    // const [img,setImg] = useState(currentUser.photoURL == "" ? require("../../assets/avatar.png") : currentUser.photoURL);
+    const [img, setImg] = useState(currentUser.photoURL == "" ? "../../assets/avatar.png" : currentUser.photoURL);
+    const [isPicked, setPicked] = useState(currentUser.photoURL == "" ? false : true);
+
+    const pickImage = () => {
+        ImagePicker.requestMediaLibraryPermissionsAsync().then((status) => {
+            if (status.granted) {
+                ImagePicker.launchImageLibraryAsync({
+                    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                    allowsEditing: true,
+                    aspect: [4, 3],
+                    quality: 1
+                }).then((result) => {
+                    if (!result.cancelled) {
+                        setImg(result.uri)
+                        fetch(result.uri).then((response) => {
+                            response.blob().then((blob) => {
+                                let ref = firebase.storage().ref().child(`profile/${currentUser.uid}`)
+                                ref.put(blob).then(() => {
+                                    firebase.storage().ref(`profile/${currentUser.uid}`).getDownloadURL().then((url) => {
+                                        firebase.firestore().collection("users").doc(currentUser.uid)
+                                            .update({ photoURL: url })
+                                            .then(() => {
+                                                Alert.alert("Success", "Image Uploaded Successfully")
+                                                setcurrentUser({ ...currentUser, photoURL: url })
+                                            })
+                                    })
+                                })
+                            })
+                        })
+                        setPicked(true);
+                    }
+                })
+            }
+        });
+    }
+    function handleName(text) {
+        setUserDetails(prevValue => {
+            return {
+                name: text,
+                email: prevValue.email
+            };
+        });
+    }
+    function handleEmail(text) {
+        setUserDetails(prevValue => {
+            return {
+                name: prevValue.name,
+                email: text
+            };
+        });
+
+    }
+    function handleUpdates() {
+        const newObj = {
+            "displayName": userDetails.name,
+            "email": userDetails.email,
+        }
+        firebase.firestore().collection("users").doc(currentUser.uid).update(newObj).then(() => {
+
+            AsyncStorage.setItem(keys.storage.USER, JSON.stringify({ ...currentUser, ...newObj }))
+                .then(() => {
+                    setcurrentUser({ ...currentUser, ...newObj })
+                    setavatarname(userDetails.name);
+                    Alert.alert("Success", "Details Updated Successfully")
+                })
+        });
+    }
+    // console.log(img)
+    function AvatarCard() {
+        return (
+            &lt;View style={styles.card}>
+                &lt;View>
+                    &lt;Text style={styles.cardText}>
+                        {avatarName}
+                    &lt;/Text>
+                    &lt;Text style={styles.cardText}>
+                        {currentUser.phoneNumber}
+                    &lt;/Text>
+
+                &lt;/View>
+                {/* &lt;Image resize Mode="contain" style={styles.cardImage} source={
+                    {uri: currentUser.photoURL == "" ? require("../../assets/avatar.png") : currentUser.photoURL}
+                    } /> */}
+                {isPicked ? &lt;Image resize Mode="contain" style={styles.cardImage} source={{ uri: img }} /> :
+                    &lt;Image resize Mode="contain" style={styles.cardImage} source={require("../../assets/avatar.png")} />}
+            &lt;/View>);
+    }
+    const services = [
+        {
+            id: "1",
+            name: "Upload Image",
+            action: (onPress) => {
+                pickImage();
+            }
+        },
+        {
+            id: "2",
+            name: "Update",
+            action: (onPress) => {
+                handleUpdates();
+            }
+        },
+        {
+            id: "3",
+            name: "Go Back",
+            action: (onPress) => setcurrentView({ screen: keys.screens.PROFILE, header: true, footer: true })
+        }
+    ]
+    const _renderItem = (item) => {
+        return &lt;View style={styles.submitButton}
+            key={item.id}>
+            &lt;TouchableOpacity
+                onPress={() => item.action()} // to be added
+                style={styles.listItemTouchable}>
+                &lt;View style={{ flex: 0.6 }}>
+                    &lt;Text style={styles.ServiceNameStyle}>{item.name}&lt;/Text>
+                &lt;/View>
+            &lt;/TouchableOpacity>
+        &lt;/View>
+    }
+    return (
+        &lt;View style={styles.homeScreen}>
+            &lt;AvatarCard />
+            &lt;Text
+                style={styles.EditProfileTitle}>
+                Edit Profile
+            &lt;/Text>
+            &lt;TextInput style={styles.input}
+                underlineColorAndroid="transparent"
+                value={userDetails.name}
+                onChangeText={(text) => handleName(text)}
+            />
+            &lt;TextInput style={styles.input}
+                underlineColorAndroid="transparent"
+                value={userDetails.email}
+                onChangeText={(text) => handleEmail(text)}
+            />
+            &lt;SafeAreaView style={{ flex: 1, marginBottom: 15 }}>
+                {
+                    services.map(_renderItem)
+                }
+            &lt;/SafeAreaView>
+        &lt;/View>
+    )
+}
+
+const styles = StyleSheet.create({
+    homeScreen: {
+        backgroundColor: keys.colors.HOMEBACKGROUND,
+        flex: 1,
+        width: '100%'
+    },
+    EditProfileTitle: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 25,
+        marginBottom: 10,
+        color: keys.colors.MAIN
+    },
+    input: {
+        backgroundColor: 'white',
+        width: '92%',
+        height: undefined,
+        aspectRatio: 1 / 0.185,
+        marginHorizontal: '4%',
+        marginVertical: '1%',
+        borderRadius: 5,
+        textAlign: 'center',
+        fontSize: 20
+    },
+    card: {
+        backgroundColor: "white",
+        width: '92%',
+        height: "25%",
+        borderStyle: 'solid',
+        borderWidth: 1,
+        marginHorizontal: '4%',
+        marginVertical: '1.5%',
+        borderRadius: 17,
+        marginVertical: "2%",
+        marginBottom: "8%",
+        marginTop: "5%",
+        flexDirection: 'row',
+        justifyContent: "space-evenly",
+        alignItems: 'center'
+    },
+    cardImage: {
+        width: 120,
+        height: 120,
+        borderRadius: 150 / 2,
+        overflow: "hidden",
+        borderWidth: 3,
+        borderColor: keys.colors.MAIN,
+    },
+    cardText: {
+        textAlign: 'left',
+        textAlignVertical: 'center',
+        fontSize: 18,
+        color: keys.colors.MAIN,
+        padding: "2%",
+        marginHorizontal: "2%",
+    },
+    submitButton: {
+        backgroundColor: 'white',
+        width: '92%',
+        height: undefined,
+        aspectRatio: 1 / 0.185,
+        marginHorizontal: '4%',
+        marginVertical: '1%',
+        borderRadius: 5
+    },
+    listItemTouchable: {
+        flexDirection: 'row',
+        justifyContent: "space-evenly"
+    },
+    ServiceNameStyle: {
+        fontSize: 20,
+        alignSelf: 'center',
+        margin: '10%'
+    },
+});
+export default EditProfile</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import { FirebaseRecaptchaVerifierModal, FirebaseRecaptchaBanner } from 'expo-firebase-recaptcha';
 import * as firebase from 'firebase';
 import React, { useState, useEffect, useRef } from 'react'
@@ -7,10 +10,18 @@ import CreateUser from "./CreateUser";
 import FirstAuthScreen from './FirstAuthScreen';
 
 
-/*
-    * This View is responsible for sending OTP to the number
-    * A text box to enter contact number
-    * and a button to send otp to the entered number
+/**
+ * This View is responsible for sending OTP to the number
+ * A text box to enter contact number and a button to send otp to the entered number
+ * @param {Object} obj - An Object
+ * @param {boolean} obj.sendOTPPressed - otp button pressed or not
+ * @param {function} obj.setsendOTPPressed - otp pressed setter
+ * @param {string} obj.contact - contact number
+ * @param {function} obj.updateContact - setter contact number
+ * @param {boolean} obj.sendOTPEnabled - send OTP button clickable state
+ * @param {function} obj.setVerificationId - setter verification id
+ * @param {reference} obj.recaptchaVerifier - captcha reference
+ * @returns {View} - React Componnent View
 */
 function SendOTPView({ sendOTPPressed, setsendOTPPressed, contact, updateContact, sendOTPEnabled, setVerificationId, recaptchaVerifier }) {
     function handleSendOTP() {
@@ -48,10 +59,18 @@ function SendOTPView({ sendOTPPressed, setsendOTPPressed, contact, updateContact
     )
 }
 
-/*
-    * This piece of code is responsible for verification of OTP entered by the user
-    * It takes OTP input from user  and check if it matches or not
-    * If OTP is verfied then the current stage is set to 2
+/**
+ * This piece of code is responsible for verification of OTP entered by the user
+ * It takes OTP input from user  and check if it matches or not
+ * If OTP is verfied then the current stage is set to 2
+ * @param {Object} obj - An Object
+ * @param {function} obj.setincompleteUser - setter incomplete user
+ * @param {function} obj.setCurrentStage - setter current stage
+ * @param {boolean} obj.sendOTPPressed - otp button pressed or not
+ * @param {string} obj.verificationCode - user entered verfication code
+ * @param {string} obj.verificationId - verfication id
+ * @param {function} obj.setVerificationCode - setter verfication code
+ * @returns {View} - React Componnent View
 */
 function VerifyOTPView({ setincompleteUser, setCurrentStage, sendOTPPressed, verificationCode, verificationId, setVerificationCode }) {
 
@@ -98,14 +117,19 @@ function VerifyOTPView({ setincompleteUser, setCurrentStage, sendOTPPressed, ver
     </View>
 }
 
-/*
-    * currentStage: 1
-    * This is the function which is responsible for verification of contact number
-    * 1: Takes in input number 
-    * 2: Recapatcha to verify human
-    * 3: Send OTP
-    * 4: Input OTP
-    * 5: Verify If OTP is correct or not
+/**
+ * currentStage: 1
+ * This is the function which is responsible for verification of contact number
+ * 1: Takes in input number 
+ * 2: Recapatcha to verify human
+ * 3: Send OTP
+ * 4: Input OTP
+ * 5: Verify If OTP is correct or not
+ * @param {Object} obj - An Object
+ * @param {function} obj.setCurrentStage - setter current stage
+ * @param {Object} obj.incompleteUser - incomplete user profile
+ * @param {function} obj.setincompleteUser - setter incomplete user
+ * @returns {View} - React Componnent View
 */
 function MainVerificationScreen({ setCurrentStage, incompleteUser, setincompleteUser }) {
     const [sendOTPEnabled, setsendOTPEnabled] = useState(false);
@@ -135,13 +159,13 @@ function MainVerificationScreen({ setCurrentStage, incompleteUser, setincomplete
             attemptInvisibleVerification={attemptInvisibleVerification}
             title='Prove you are human!'
         />
-        {/* Take user contact number input */}
+        {/** Take user contact number input */}
         <SendOTPView setsendOTPPressed={setsendOTPPressed} sendOTPPressed={sendOTPPressed} contact={contact} updateContact={updateContact} sendOTPEnabled={sendOTPEnabled} recaptchaVerifier={recaptchaVerifier} setVerificationId={setVerificationId} />
         {sendOTPPressed && <VerifyOTPView incompleteUser={incompleteUser} setincompleteUser={setincompleteUser} sendOTPPressed={sendOTPPressed} verificationCode={verificationCode} setVerificationCode={setVerificationCode} verificationId={verificationId} setCurrentStage={setCurrentStage} />}
     </View>
 }
 
-/*
+/**
     * Sign In Screen consist of three stages mainly
     * 0: A button is visible with "Sign in"
     * 1: Verify contact number

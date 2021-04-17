@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import React from 'react'
 import { Text, View, Button } from 'react-native'
 import keys from "../../configs/KEYS"
@@ -8,8 +11,13 @@ import { SafeAreaView, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { cleanCache } from "../../configs/CacheManager";
-
-function Temporary({ currentUser, setcurrentUser }) {
+/**
+ * Performs signout and removes from local persistent storage as well
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setcurrentUser - current user setter
+ */
+function PerFormSignOut({ currentUser, setcurrentUser }) {
     function performSignout() {
         firebase.auth().signOut()
         AsyncStorage.removeItem(keys.storage.USER).then(() => {
@@ -23,7 +31,14 @@ function Temporary({ currentUser, setcurrentUser }) {
         <Button title="Sign out" onPress={performSignout} />
     </View>
 }
-
+/**
+ * Renders Profile Page and allows to select any of the subscreen
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setcurrentUser - current user setter
+ * @param {function} obj.setcurrentView - set current visible/selected view
+ * @returns {View} - React Coponent View
+ */
 function Profile({ currentUser, setcurrentUser, setcurrentView }) {
     function AvatarCard() {
         return (

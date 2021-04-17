@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Components/Profile/AddAddress.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Components/Profile/AddAddress.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @module
+ */
+import React from 'react'
+import { Text, View, Button, TextInput } from 'react-native'
+import keys from "../../configs/KEYS"
+import AsyncStorage from '@react-native-community/async-storage';
+import * as firebase from 'firebase';
+import { Image, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { FontAwesome5, MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { Modal, Dimensions } from "react-native";
+
+
+/**
+ * Adds Address 
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setCurrentUser - current user setter
+ * @param {function} obj.setcurrentView - current view setter
+ * @return {View} - React Component View
+*/
+function AddAddress({ currentUser, setcurrentUser, setcurrentView }) {
+    const services = [
+        {
+            id: "1",
+            name: "Add",
+            action: (onPress) => {
+                handleAdd();
+            }
+        },
+        {
+            id: "2",
+            name: "Go Back",
+            action:(onPress) => setcurrentView({screen: keys.screens.PROFILE, header: true, footer:true})
+        }
+    ]
+    const _renderItem = (item) => {
+        return &lt;View style={styles.serviceListItem}
+            key={item.id}>
+            &lt;TouchableOpacity
+                onPress = {()=>item.action()} // to be added
+                style={styles.listItemTouchable}>
+                &lt;View style={{ flex: 0.6 }}>
+                    &lt;Text style={styles.ServiceNameStyle}>{item.name}&lt;/Text>
+                &lt;/View>
+            &lt;/TouchableOpacity>
+        &lt;/View>
+    }
+    function handleAdd(){
+        
+    }
+
+    return (
+        &lt;View style={styles.homeScreen}>
+            &lt;Text
+                style={styles.AddAddressTitle}>
+                Add New Address
+            &lt;/Text> 
+            &lt;TextInput style = {styles.input}
+                underlineColorAndroid = "transparent"
+                placeholder = "Address Name" 
+            />
+            &lt;TextInput style = {styles.input}
+                underlineColorAndroid = "transparent"
+                placeholder = "Enter Address" 
+            />
+            &lt;TextInput style = {styles.input}
+                underlineColorAndroid = "transparent"
+                placeholder = "Enter State" 
+            />
+            &lt;TextInput style = {styles.input}
+                underlineColorAndroid = "transparent"
+                placeholder = "Enter Pincode" 
+            />
+            &lt;SafeAreaView style={{ flex: 1, marginBottom: 15 }}>
+                {
+                    services.map(_renderItem)
+                }
+            &lt;/SafeAreaView>
+            
+        &lt;/View>
+    )
+}
+
+const styles = StyleSheet.create({
+    homeScreen: {
+        backgroundColor: keys.colors.HOMEBACKGROUND,
+        flex: 1,
+        width: '100%'
+    },
+    AddAddressTitle: {
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 25,
+        marginBottom: 10,
+        color: keys.colors.MAIN,
+        marginVertical: '2%'
+    },
+    input: {
+        backgroundColor: 'white',
+        width: '92%',
+        height: undefined,
+        aspectRatio: 1 / 0.185,
+        marginHorizontal: '4%',
+        marginVertical: '1%',
+        borderRadius: 5,
+        textAlign: 'center',
+        fontSize: 20
+     },
+    submitButton:{
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        backgroundColor: 'white',
+        width: '46%',
+        height: undefined,
+        aspectRatio: 1 / 0.185,
+        marginHorizontal: '4%',
+        marginVertical: '1%',   
+    },
+    listItemTouchable: {
+        
+        flexDirection: 'row',
+        justifyContent: "space-evenly"
+    },
+    ServiceNameStyle: {
+        fontSize: 20,
+        alignSelf: 'center',
+        margin: '10%'
+    },
+    serviceListItem: {
+        backgroundColor: 'white',
+        width: '92%',
+        height: undefined,
+        aspectRatio: 1 / 0.2,
+        marginHorizontal: '4%',
+        marginVertical: '1.5%',
+        borderRadius: 7
+    },
+    
+});
+export default AddAddress
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

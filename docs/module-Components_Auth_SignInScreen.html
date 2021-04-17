@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: Components/Auth/SignInScreen</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: Components/Auth/SignInScreen</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~MainVerificationScreen"><span class="type-signature">(inner) </span>MainVerificationScreen<span class="signature">(obj)</span><span class="type-signature"> &rarr; {View}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>currentStage: 1
+This is the function which is responsible for verification of contact number
+1: Takes in input number
+2: Recapatcha to verify human
+3: Send OTP
+4: Input OTP
+5: Verify If OTP is correct or not</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An Object</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>setCurrentStage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>setter current stage</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>incompleteUser</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>incomplete user profile</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setincompleteUser</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>setter incomplete user</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Components_Auth_SignInScreen.js.html">Components/Auth/SignInScreen.js</a>, <a href="Components_Auth_SignInScreen.js.html#line134">line 134</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>React Componnent View</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">View</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~SendOTPView"><span class="type-signature">(inner) </span>SendOTPView<span class="signature">(obj)</span><span class="type-signature"> &rarr; {View}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>This View is responsible for sending OTP to the number
+A text box to enter contact number and a button to send otp to the entered number</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An Object</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sendOTPPressed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>otp button pressed or not</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setsendOTPPressed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>otp pressed setter</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>contact</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>contact number</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>updateContact</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>setter contact number</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sendOTPEnabled</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>send OTP button clickable state</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setVerificationId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>setter verification id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>recaptchaVerifier</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">reference</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>captcha reference</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Components_Auth_SignInScreen.js.html">Components/Auth/SignInScreen.js</a>, <a href="Components_Auth_SignInScreen.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>React Componnent View</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">View</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~SignInScreen"><span class="type-signature">(inner) </span>SignInScreen<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Sign In Screen consist of three stages mainly
+0: A button is visible with &quot;Sign in&quot;
+1: Verify contact number
+2: If signup: take additional user information then redirect to homepage at this stage user is authenticated, if Login: redirect to home screen</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Components_Auth_SignInScreen.js.html">Components/Auth/SignInScreen.js</a>, <a href="Components_Auth_SignInScreen.js.html#line174">line 174</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~VerifyOTPView"><span class="type-signature">(inner) </span>VerifyOTPView<span class="signature">(obj)</span><span class="type-signature"> &rarr; {View}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>This piece of code is responsible for verification of OTP entered by the user
+It takes OTP input from user  and check if it matches or not
+If OTP is verfied then the current stage is set to 2</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>obj</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An Object</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>setincompleteUser</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>setter incomplete user</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setCurrentStage</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>setter current stage</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sendOTPPressed</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>otp button pressed or not</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>verificationCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>user entered verfication code</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>verificationId</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>verfication id</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setVerificationCode</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>setter verfication code</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Components_Auth_SignInScreen.js.html">Components/Auth/SignInScreen.js</a>, <a href="Components_Auth_SignInScreen.js.html#line75">line 75</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>React Componnent View</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">View</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

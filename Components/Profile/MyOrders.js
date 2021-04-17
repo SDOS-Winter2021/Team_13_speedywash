@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import React, { useEffect, useState } from 'react'
 import { Text, View, Button, TextInput } from 'react-native'
 import keys from "../../configs/KEYS"
@@ -8,6 +11,15 @@ import { SafeAreaView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native';
 
+/**
+ * Show user their current order and past order, for current order allows them to see amount to be paid, 
+ * Current status/stage and cancel orders.
+ * @param {Object} obj - An object
+ * @param {module:globaltypes.User} obj.currentUser - current user profile
+ * @param {function} obj.setcurrentUser - current user setter
+ * @param {function} obj.setcurrentView - set current visible/selected view
+ * @returns {View} - React Coponent View
+ */
 function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
     const [orderType, setOrderType] = useState(0);
     const [incompleteOrders, setIncompleteOrders] = useState({});
