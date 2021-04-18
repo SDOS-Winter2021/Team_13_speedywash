@@ -40,6 +40,9 @@ function SendOTPView({ sendOTPPressed, setsendOTPPressed, contact, updateContact
     }
     return (
         <View >
+            <Text style={styles.headerText}>
+            { sendOTPPressed ? "Enter the Verification Code" : "Enter your Mobile Number" } 
+            </Text>
             <TextInput
                 style={styles.textBox}
                 editable={!sendOTPPressed}
@@ -54,7 +57,9 @@ function SendOTPView({ sendOTPPressed, setsendOTPPressed, contact, updateContact
                 textContentType="telephoneNumber"
                 value={contact}
             />
+            { !sendOTPPressed &&
             <Button disabled={!sendOTPEnabled || sendOTPPressed} title={"Send OTP"} onPress={handleSendOTP} />
+            }
         </View>
     )
 }
@@ -195,6 +200,11 @@ function SignInScreen({ currentUser, setcurrentUser }) {
 }
 
 const styles = StyleSheet.create({
+    headerText : {
+        margin: "10%",
+        fontSize: 25,
+        fontWeight: 'bold'
+    },
     textBox: {
         width: "80%",
         margin: "10%",
