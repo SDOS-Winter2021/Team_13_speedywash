@@ -8,10 +8,8 @@ import { Text, View, StyleSheet, ScrollView, Button } from 'react-native'
 import Footer from '../Footer/Footer'
 import Header from '../Header/Header'
 import HomeScreen from '../HomeScreen/HomeScreen';
-import Subscriptions from '../Subscriptions/Subscriptions';
 import Profile from '../Profile/Profile';
 import Cart from '../Cart/Cart';
-import Notification from '../Notification/Notification';
 import EditProfile from '../Profile/EditProfile'
 import ManageAddress from '../Profile/ManageAddress'
 import AddAddress from '../Profile/AddAddress'
@@ -34,12 +32,8 @@ function SwitchView({ currentView, setcurrentView, currentUser, setcurrentUser }
     switch (currentView.screen) {
         case keys.screens.HOME:
             return <HomeScreen currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
-        case keys.screens.SUBS:
-            return <Subscriptions currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
         case keys.screens.PROFILE:
             return <Profile currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
-        case keys.screens.NOTIFICATION:
-            return <Notification currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
         case keys.screens.CART:
             return <Cart currentUser={currentUser} setcurrentUser={setcurrentUser} currentView={currentView} setcurrentView={setcurrentView} />;
         case keys.screens.EDITPROFILE:
