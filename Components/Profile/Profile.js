@@ -63,34 +63,22 @@ function Profile({ currentUser, setcurrentUser, setcurrentView }) {
         },
         {
             id: "2",
-            name: "Subscription",
-            action: () => { }
-        },
-        {
-            id: "3",
             name: "My Orders",
             action: (onPress) => { setcurrentView({ screen: keys.screens.MYORDERS, header: true, footer: true})}
         },
         {
-            id: "4",
+            id: "3",
             name: "Manage Address",
             action: (onPress) => setcurrentView({ screen: keys.screens.MANAGEADDRESS, header: true, footer: true })
         },
         {
-            id: "5",
+            id: "4",
             name: "Sign Out",
             action: () => {
                 firebase.auth().signOut()
                 AsyncStorage.removeItem(keys.storage.USER).then(() => {
                     setcurrentUser(null);
                 })
-            }
-        },
-        {
-            id: "6",
-            name: "Clean Cache",
-            action: () => {
-                cleanCache();
             }
         }
     ];

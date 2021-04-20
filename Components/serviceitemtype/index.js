@@ -51,6 +51,7 @@ const ServiceItemType = (props) => {
                 })
                 setData(map_count);
                 setCount(0);
+                setIsActive(false);
             }
             else {
 
@@ -88,6 +89,7 @@ const ServiceItemType = (props) => {
                 })
                 setData(map_count);
                 setCount(0);
+                setIsActive(false);
             }
             else {
                 if (value[heading] == null) {
