@@ -41,6 +41,9 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
         If not present then fetch the latest price values from the database 
         and store them into cache for 1 day
     */
+
+    const [advertisementURL, setAdvertisementURL] = useState("");
+
     useEffect(() => {
         getValue(keys.storage.HOMEPAGE_DATA).then((value) => {
             if (value == null) {
@@ -58,6 +61,17 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
                 setWholeDataObject(value)
             }
         })
+    }, [])
+
+    useEffect(() => {
+            firebase.storage()
+            .ref("advertisements")
+            .child("image")
+            .getDownloadURL()
+            .then(url => {
+                setAdvertisementURL(url);
+                console.log(url);
+            })
     }, [])
 
     const _renderItem = (item) => {
@@ -92,11 +106,14 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
             nestedScrollEnabled={false}
             showsVerticalScrollIndicator={false}
             style={styles.homeScreen}>
+            { // first check if the advertisement image has been fetched from the database or not 
+            advertisementURL=="" ||
             <View style={styles.marketingArea}>
                 <Image resizeMode="contain"
                     style={styles.marketingImage}
-                    source={require('./marketing.jpg')} />
+                    source={{uri : advertisementURL}} />
             </View>
+            }
             <Text
                 style={styles.selectServiceTitle}>
                 Select Service
@@ -129,13 +146,14 @@ const styles = StyleSheet.create({
     },
     marketingArea: {
         margin: '5%',
-        marginTop: "10%",
-        backgroundColor: '#000000'
+        marginTop: "5%",
+        marginBottom: "2%"
     },
     selectServiceTitle: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 25,
+        marginTop: 5,
         marginBottom: 10,
         color: keys.colors.MAIN
     },
