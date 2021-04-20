@@ -23,11 +23,6 @@ function Header({ currentView, setcurrentView }) {
                     <FontAwesome5 name='shopping-cart' size={32} color={'white'} />
                 </TouchableOpacity>
             </View>
-            <View style={{ flex: 0.17, flexDirection: "row" }}>
-                <TouchableOpacity style={styles.icons} onPress={() => setcurrentView({ screen: keys.screens.NOTIFICATION, header: true, footer: true })}>
-                    <FontAwesome5 name='bell' size={32} color={'white'} />
-                </TouchableOpacity>
-            </View>
         </View>
     )
 }
@@ -44,7 +39,7 @@ const styles = StyleSheet.create({
         color: 'white',
         alignSelf: 'center',
         margin: '5%',
-        flex: 0.66
+        flex: 0.83
     },
     icons: {
         alignSelf: 'center'
