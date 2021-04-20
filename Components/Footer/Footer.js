@@ -22,10 +22,6 @@ function Footer({ currentView, setcurrentView }) {
                 <FontAwesome5 name="home" size={32} color={currentView.screen==keys.screens.HOME ? keys.colors.FOOTER_SELECTED : keys.colors.FOOTER_NORMAL} />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.icons} onPress={()=>setcurrentView({screen: keys.screens.SUBS, header: true, footer: true})}>
-                <MaterialIcons name="subscriptions" size={32} color={currentView.screen==keys.screens.SUBS ? keys.colors.FOOTER_SELECTED : keys.colors.FOOTER_NORMAL}  />
-            </TouchableOpacity>
-
             <TouchableOpacity style={styles.icons} onPress={()=>setcurrentView({screen: keys.screens.PROFILE, header: true, footer: true})}>
                 <FontAwesome5 name="user-circle" size={32} color={currentView.screen==keys.screens.PROFILE ? keys.colors.FOOTER_SELECTED : keys.colors.FOOTER_NORMAL}  />
             </TouchableOpacity>
