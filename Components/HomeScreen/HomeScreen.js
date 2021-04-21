@@ -73,7 +73,7 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
             .then((record) => {
                 if(record && record.data())
                 {
-                    //console.log(record.data());
+                    console.log(record.data());
                     setAdvertisementURL(record.data());
                 }
             })
