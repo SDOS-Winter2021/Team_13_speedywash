@@ -47,6 +47,8 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
 
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    const [servicepics, setservicePics] = useState({});
+
     useEffect(() => {
         getValue(keys.storage.HOMEPAGE_DATA).then((value) => {
             if (value == null) {
@@ -79,9 +81,25 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
             })
     }, [])
 
+    useEffect(() => {
+        firebase.firestore()
+        .collection("servicepics")
+        .doc("location")
+        .get()
+        .then((record) => {
+            if(record && record.data())
+            {
+                //console.log(record.data());
+                setservicePics(record.data());
+            }
+        })
+    }, [])
+
     const _renderItem = (item) => {
         // Below statement will be required while using FlatList and input will be 'element'
         // const item=element.item;
+        const link = servicepics[item];
+        //console.log(link);
         return <View style={styles.serviceListItem}
             /* key won't be required while using FlatList*/
             key={item}>
@@ -89,7 +107,7 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
                 onPress={() => setServiceSelected(item)}
                 style={styles.listItemTouchable}>
                 <View style={{ flex: 0.4 }}>
-                    <Image resizeMode="contain" style={styles.serviceImage} source={require("../../assets/favicon.png")} />
+                    <Image resizeMode="contain" style={styles.serviceImage} source={{uri : link}} />
                 </View>
                 <View style={{ flex: 0.6 }}>
                     <Text style={styles.ServiceNameStyle}>{item}</Text>
@@ -209,8 +227,12 @@ const styles = StyleSheet.create({
         justifyContent: "space-evenly"
     },
     serviceImage: {
+        width: undefined,
+        height: '80%',
+        aspectRatio: 1 / 1,
         alignSelf: 'center',
-        margin: '10%'
+        margin: '10%',
+        marginTop: '3%'
     },
     ServiceNameStyle: {
         fontSize: 20,
