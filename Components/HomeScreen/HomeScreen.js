@@ -12,6 +12,7 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { getValue, removeValue, setValue } from "../../configs/CacheManager"
 import ServiceSpecific from "../ServiceSpecific/ServiceSpecific"
+import { KeyboardAvoidingView } from 'react-native';
 
 /**
  * Renders HomeScreen View
@@ -41,6 +42,11 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
         If not present then fetch the latest price values from the database 
         and store them into cache for 1 day
     */
+
+    const [advertisementURL, setAdvertisementURL] = useState({});
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
     useEffect(() => {
         getValue(keys.storage.HOMEPAGE_DATA).then((value) => {
             if (value == null) {
@@ -58,6 +64,19 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
                 setWholeDataObject(value)
             }
         })
+    }, [])
+
+    useEffect(() => {
+            firebase.firestore()
+            .collection("advertisement").doc("list")
+            .get()
+            .then((record) => {
+                if(record && record.data())
+                {
+                    //console.log(record.data());
+                    setAdvertisementURL(record.data());
+                }
+            })
     }, [])
 
     const _renderItem = (item) => {
@@ -79,6 +98,16 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
         </View>
     };
 
+    const handleLeftClick = ()=>{
+        //console.log(currentIndex);
+        currentIndex==0 || setCurrentIndex(currentIndex-1)
+    };
+
+    const handleRightClick = ()=> {
+        //console.log(currentIndex);
+        currentIndex==(Object.keys(advertisementURL).length-1) || setCurrentIndex(currentIndex+1);
+    };
+
     const _keyExtractor = (item) => {
         return item;
     };
@@ -92,11 +121,31 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
             nestedScrollEnabled={false}
             showsVerticalScrollIndicator={false}
             style={styles.homeScreen}>
+            { // first check if the advertisement image has been fetched from the database or not 
+            advertisementURL=={} ||
             <View style={styles.marketingArea}>
+                <TouchableOpacity style={{width: "5%"}}
+                onPress={handleLeftClick}>
+                    <View style={{flex: 0.4}}></View>
+                    <View style={{flex: 0.6}}>
+                        <Text style={{flex: 1,fontSize: 30, fontWeight: 'bold'}}>{"<"}</Text>
+                    </View>
+                </TouchableOpacity>
                 <Image resizeMode="contain"
                     style={styles.marketingImage}
-                    source={require('./marketing.jpg')} />
+                    source={{ uri : advertisementURL[Object.keys(advertisementURL)[currentIndex]]
+                        // uri : advertisementURL=={} ? require("./marketing.jpg") : advertisementURL[
+                        // Object.keys(advertisementURL)[currentIndex]]
+                    }} />
+                <TouchableOpacity style={{width: "5%"}}
+                onPress={handleRightClick}>
+                    <View style={{flex: 0.4}}></View>
+                    <View style={{flex: 0.6}}>
+                        <Text style={{fontSize: 30, fontWeight: 'bold'}}>{">"}</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
+            }
             <Text
                 style={styles.selectServiceTitle}>
                 Select Service
@@ -123,19 +172,26 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     marketingImage: {
-        width: '100%',
+        width: '90%',
         height: undefined,
-        aspectRatio: 1 / 0.7
+        aspectRatio: 1 / 0.75,
+        alignSelf: 'center'
     },
     marketingArea: {
+        width: '90%',
+        height: undefined,
+        aspectRatio: 1 / 0.7,
         margin: '5%',
-        marginTop: "10%",
-        backgroundColor: '#000000'
+        marginTop: "5%",
+        marginBottom: "2%",
+        display: 'flex',
+        flexDirection: 'row'
     },
     selectServiceTitle: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 25,
+        marginTop: 5,
         marginBottom: 10,
         color: keys.colors.MAIN
     },

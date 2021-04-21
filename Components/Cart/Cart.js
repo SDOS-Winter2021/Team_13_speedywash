@@ -3,7 +3,7 @@
  */
 // import { stopLocationUpdatesAsync } from 'expo-location';
 import React, { useEffect, useState } from 'react'
-import { Text, View, ScrollView, TouchableOpacity } from 'react-native'
+import { Text, View, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import { getValue, setValue, removeValue } from '../../configs/CacheManager'
 import keys from '../../configs/KEYS'
 import ServiceSpecific from '../ServiceSpecific/ServiceSpecific.js';
@@ -68,7 +68,20 @@ function Cart({ currentView, setcurrentView, currentUser, setcurrentUser }) {
                     </View>
                 </ScrollView>
                 {<TouchableOpacity onPress={() => {
-                    setProceed(true);
+                    if(total>0)
+                        setProceed(true);
+                    else{
+                        Alert.alert(
+                            "Empty Order",
+                            "You cannot place an empty order",
+                            [
+                                {
+                                    text: "Dismiss",
+                                    style: "destructive"
+                                }
+                            ]
+                        );
+                    }
                 }} style={styles.total}><Text style={styles.totaltext}>Total Amount is {total}</Text><Text style={styles.totaltext}>(Click to Proceed)</Text></TouchableOpacity>}
             </View>
     )
