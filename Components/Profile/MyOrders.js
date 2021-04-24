@@ -10,6 +10,7 @@ import { Image, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native';
+import { set } from 'react-native-reanimated';
 
 /**
  * Show user their current order and past order, for current order allows them to see amount to be paid, 
@@ -25,8 +26,8 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
     const [incompleteOrders, setIncompleteOrders] = useState({});
     const [completedOrders, setCompletedOrders] = useState({});
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [incompleteOrdersList, setIncompleteOrdersList] = useState(null);
-    const [completedOrdersList, setCompletedOrdersList] = useState(null);
+    const [incompleteOrdersList, setIncompleteOrdersList] = useState([]);
+    const [completedOrdersList, setCompletedOrdersList] = useState([]);
     const [Order, setOrder] = useState({});
 
     useEffect(() => {
@@ -35,11 +36,27 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
             //console.log(record.data());
             if (record && record.data()) {
                 //console.log(Object.keys(record.data()));
-                setIncompleteOrders(record.data());
-                setIncompleteOrdersList(Object.keys(record.data()));
+                let all_orders = record.data();
+                let incomplete = {};
+                let complete = {};
+                Object.keys(all_orders).map((item)=>{
+                    if(all_orders[item].orderStatus.stage ==4)
+                    {
+                        complete = {...complete,
+                                    [item] : all_orders[item] };
+                    }
+                    else
+                    {
+                        incomplete = {...incomplete,
+                            [item] : all_orders[item]};
+                        //console.log(item);
+                    }
+                });
+                setCompletedOrders(complete);
+                setIncompleteOrders(incomplete);
+                setIncompleteOrdersList(Object.keys(incomplete));
                 // BELOW 2 LINES ARE ONLY FOR TWO TESTING PURPOSES. BE SURE TO COMMENT THEM FOR CORRECT WORKING
-                setCompletedOrders(record.data());
-                setCompletedOrdersList(Object.keys(record.data()));
+                setCompletedOrdersList(Object.keys(complete));
             }
         })
     }, [])
@@ -71,10 +88,11 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         
         const temp = {...incompleteOrders};
         delete temp[item];
+        const temp2 = {...temp, ...completedOrders};
+        firebase.firestore()
+        .collection("incompleteOrders").doc(currentUser.uid).set(temp2);
         setIncompleteOrdersList(Object.keys(temp));
         setIncompleteOrders(temp);
-        firebase.firestore()
-        .collection("incompleteOrders").doc(currentUser.uid).set(temp);
     };
 
     const onClickCancel = (item) => {
@@ -101,7 +119,7 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         // const item=element.item;
         
         // return <View><Text>djhf</Text><Button title="kdjf" onPress={()=>{onClickCancel(item)}}></Button></View>
-        pickupDate = incompleteOrders[item]["pickUpDate"].toDate();
+        const pickupDate = incompleteOrders[item]["pickUpDate"].toDate();
         return <View style={styles.outerBox} key={item}> 
 
             <View style={{flexDirection: "row"}}>
@@ -143,7 +161,7 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         // const item=element.item;
         
         // return <View><Text>djhf</Text><Button title="kdjf" onPress={()=>{onClickCancel(item)}}></Button></View>
-        pickupDate = completedOrders[item]["pickUpDate"].toDate();
+        const pickupDate = completedOrders[item]["pickUpDate"].toDate();
         // Uncomment below line when database is updated with drop dates
         // dropDate = completedOrders[item]["dropDate"].toDate();
         return <View style={styles.outerBox} key={item}> 
@@ -183,11 +201,11 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         style={styles.wholePage}>
         <TopBar></TopBar>
         {
-            incompleteOrdersList==null ||
+            incompleteOrdersList==[] ||
             (orderType==0 && incompleteOrdersList.map(_renderIncompleteItem))
         }
         {
-            completedOrdersList==null ||
+            completedOrdersList==[] ||
             (orderType==1 && completedOrdersList.map(_renderCompletedItem))
         }
     </ScrollView>
