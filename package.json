@@ -3,10 +3,18 @@
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
+    "test": "jest",
     "doc": "jsdoc -c jsdoc.json",
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject"
+  },
+  "jest": {
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|@sentry/.*)"
+    ],
+    "collectCoverage": true
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.0",
@@ -27,12 +35,14 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
+    "react-native-async-storage": "0.0.1",
     "react-native-elements": "^3.2.0",
     "react-native-paper": "^4.7.2",
     "react-native-reanimated": "~1.13.0",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "^0.15.0",
-    "react-native-webview": "11.0.0"
+    "react-native-webview": "11.0.0",
+    "react-test-renderer": "^17.0.2"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

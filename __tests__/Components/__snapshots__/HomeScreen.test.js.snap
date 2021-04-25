@@ -1,0 +1,159 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HomeScreen renders correctly 1`] = `
+<RCTScrollView
+  nestedScrollEnabled={false}
+  showsVerticalScrollIndicator={false}
+  style={
+    Object {
+      "backgroundColor": "#DCF2FD",
+      "flex": 1,
+      "width": "100%",
+    }
+  }
+>
+  <View>
+    <View
+      style={
+        Object {
+          "aspectRatio": 1.4285714285714286,
+          "display": "flex",
+          "flexDirection": "row",
+          "height": undefined,
+          "margin": "5%",
+          "marginBottom": "2%",
+          "marginTop": "5%",
+          "width": "90%",
+        }
+      }
+    >
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "opacity": 1,
+            "width": "5%",
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "flex": 0.4,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flex": 0.6,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "flex": 1,
+                "fontSize": 30,
+                "fontWeight": "bold",
+              }
+            }
+          >
+            &lt;
+          </Text>
+        </View>
+      </View>
+      <Image
+        resizeMode="contain"
+        source={
+          Object {
+            "uri": undefined,
+          }
+        }
+        style={
+          Object {
+            "alignSelf": "center",
+            "aspectRatio": 1.3333333333333333,
+            "height": undefined,
+            "width": "90%",
+          }
+        }
+      />
+      <View
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "opacity": 1,
+            "width": "5%",
+          }
+        }
+      >
+        <View
+          style={
+            Object {
+              "flex": 0.4,
+            }
+          }
+        />
+        <View
+          style={
+            Object {
+              "flex": 0.6,
+            }
+          }
+        >
+          <Text
+            style={
+              Object {
+                "fontSize": 30,
+                "fontWeight": "bold",
+              }
+            }
+          >
+            &gt;
+          </Text>
+        </View>
+      </View>
+    </View>
+    <Text
+      style={
+        Object {
+          "color": "#006BAD",
+          "fontSize": 25,
+          "fontWeight": "bold",
+          "marginBottom": 10,
+          "marginTop": 5,
+          "textAlign": "center",
+        }
+      }
+    >
+      Select Service
+    </Text>
+    <RCTSafeAreaView
+      emulateUnlessSupported={true}
+      style={
+        Object {
+          "flex": 1,
+          "marginBottom": 15,
+        }
+      }
+    />
+  </View>
+</RCTScrollView>
+`;
