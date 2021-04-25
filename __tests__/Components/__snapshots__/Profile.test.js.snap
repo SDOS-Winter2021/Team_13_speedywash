@@ -1,0 +1,305 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Profile renders correctly 1`] = `
+<RCTScrollView
+  nestedScrollEnabled={false}
+  showsVerticalScrollIndicator={false}
+  style={
+    Object {
+      "backgroundColor": "#DCF2FD",
+      "flex": 1,
+      "width": "100%",
+    }
+  }
+>
+  <View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "white",
+          "borderRadius": 17,
+          "borderStyle": "solid",
+          "borderWidth": 1,
+          "flexDirection": "row",
+          "height": "25%",
+          "justifyContent": "space-evenly",
+          "marginBottom": "8%",
+          "marginHorizontal": "4%",
+          "marginTop": "5%",
+          "marginVertical": "2%",
+          "width": "92%",
+        }
+      }
+    >
+      <View>
+        <Text
+          style={
+            Object {
+              "color": "#006BAD",
+              "fontSize": 18,
+              "marginHorizontal": "2%",
+              "padding": "2%",
+              "textAlign": "left",
+              "textAlignVertical": "center",
+            }
+          }
+        >
+          test
+        </Text>
+        <Text
+          style={
+            Object {
+              "color": "#006BAD",
+              "fontSize": 18,
+              "marginHorizontal": "2%",
+              "padding": "2%",
+              "textAlign": "left",
+              "textAlignVertical": "center",
+            }
+          }
+        >
+          +919958820305
+        </Text>
+      </View>
+      <Image
+        Mode="contain"
+        resize={true}
+        source={
+          Object {
+            "uri": "https://firebasestorage.googleapis.com/v0/b/speedywash-7d67a.appspot.com/o/profile%2FxD1ncicw8lbnZGk9sTxPH9yCEi13?alt=media&token=85833276-6e3d-4a86-bbab-1d18c643d48a",
+          }
+        }
+        style={
+          Object {
+            "borderColor": "#006BAD",
+            "borderRadius": 75,
+            "borderWidth": 3,
+            "height": 120,
+            "overflow": "hidden",
+            "width": 120,
+          }
+        }
+      />
+    </View>
+    <RCTSafeAreaView
+      emulateUnlessSupported={true}
+      style={
+        Object {
+          "flex": 1,
+          "marginBottom": "20%",
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "aspectRatio": 5,
+            "backgroundColor": "white",
+            "borderRadius": 7,
+            "height": undefined,
+            "marginHorizontal": "4%",
+            "marginVertical": "1.5%",
+            "width": "92%",
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "flexDirection": "row",
+              "justifyContent": "space-evenly",
+              "opacity": 1,
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "flex": 0.6,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "fontSize": 20,
+                  "margin": "10%",
+                }
+              }
+            >
+              Edit Profile
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "aspectRatio": 5,
+            "backgroundColor": "white",
+            "borderRadius": 7,
+            "height": undefined,
+            "marginHorizontal": "4%",
+            "marginVertical": "1.5%",
+            "width": "92%",
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "flexDirection": "row",
+              "justifyContent": "space-evenly",
+              "opacity": 1,
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "flex": 0.6,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "fontSize": 20,
+                  "margin": "10%",
+                }
+              }
+            >
+              My Orders
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "aspectRatio": 5,
+            "backgroundColor": "white",
+            "borderRadius": 7,
+            "height": undefined,
+            "marginHorizontal": "4%",
+            "marginVertical": "1.5%",
+            "width": "92%",
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "flexDirection": "row",
+              "justifyContent": "space-evenly",
+              "opacity": 1,
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "flex": 0.6,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "fontSize": 20,
+                  "margin": "10%",
+                }
+              }
+            >
+              Manage Address
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          Object {
+            "aspectRatio": 5,
+            "backgroundColor": "white",
+            "borderRadius": 7,
+            "height": undefined,
+            "marginHorizontal": "4%",
+            "marginVertical": "1.5%",
+            "width": "92%",
+          }
+        }
+      >
+        <View
+          accessible={true}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            Object {
+              "flexDirection": "row",
+              "justifyContent": "space-evenly",
+              "opacity": 1,
+            }
+          }
+        >
+          <View
+            style={
+              Object {
+                "flex": 0.6,
+              }
+            }
+          >
+            <Text
+              style={
+                Object {
+                  "alignSelf": "center",
+                  "fontSize": 20,
+                  "margin": "10%",
+                }
+              }
+            >
+              Sign Out
+            </Text>
+          </View>
+        </View>
+      </View>
+    </RCTSafeAreaView>
+  </View>
+</RCTScrollView>
+`;

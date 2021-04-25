@@ -1,0 +1,55 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "backgroundColor": "#006BAD",
+      "flexDirection": "row",
+      "height": "100%",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "alignSelf": "center",
+        "color": "white",
+        "flex": 0.83,
+        "fontSize": 20,
+        "margin": "5%",
+      }
+    }
+  >
+    Speedywash India
+  </Text>
+  <View
+    style={
+      Object {
+        "flex": 0.17,
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      accessible={true}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        Object {
+          "alignSelf": "center",
+          "opacity": 1,
+        }
+      }
+    >
+      <Text />
+    </View>
+  </View>
+</View>
+`;
