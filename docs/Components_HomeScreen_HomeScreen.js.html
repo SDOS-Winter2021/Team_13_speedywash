@@ -40,6 +40,7 @@ import * as firebase from 'firebase';
 import 'firebase/firestore';
 import { getValue, removeValue, setValue } from "../../configs/CacheManager"
 import ServiceSpecific from "../ServiceSpecific/ServiceSpecific"
+import { KeyboardAvoidingView } from 'react-native';
 
 /**
  * Renders HomeScreen View
@@ -69,6 +70,13 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
         If not present then fetch the latest price values from the database 
         and store them into cache for 1 day
     */
+
+    const [advertisementURL, setAdvertisementURL] = useState({});
+
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    const [servicepics, setservicePics] = useState({});
+
     useEffect(() => {
         getValue(keys.storage.HOMEPAGE_DATA).then((value) => {
             if (value == null) {
@@ -88,9 +96,38 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
         })
     }, [])
 
+    useEffect(() => {
+            firebase.firestore()
+            .collection("advertisement").doc("list")
+            .get()
+            .then((record) => {
+                if(record &amp;&amp; record.data())
+                {
+                    //console.log(record.data());
+                    setAdvertisementURL(record.data());
+                }
+            })
+    }, [])
+
+    useEffect(() => {
+        firebase.firestore()
+        .collection("servicepics")
+        .doc("location")
+        .get()
+        .then((record) => {
+            if(record &amp;&amp; record.data())
+            {
+                //console.log(record.data());
+                setservicePics(record.data());
+            }
+        })
+    }, [])
+
     const _renderItem = (item) => {
         // Below statement will be required while using FlatList and input will be 'element'
         // const item=element.item;
+        const link = servicepics[item];
+        //console.log(link);
         return &lt;View style={styles.serviceListItem}
             /* key won't be required while using FlatList*/
             key={item}>
@@ -98,13 +135,23 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
                 onPress={() => setServiceSelected(item)}
                 style={styles.listItemTouchable}>
                 &lt;View style={{ flex: 0.4 }}>
-                    &lt;Image resizeMode="contain" style={styles.serviceImage} source={require("../../assets/favicon.png")} />
+                    &lt;Image resizeMode="contain" style={styles.serviceImage} source={{uri : link}} />
                 &lt;/View>
                 &lt;View style={{ flex: 0.6 }}>
                     &lt;Text style={styles.ServiceNameStyle}>{item}&lt;/Text>
                 &lt;/View>
             &lt;/TouchableOpacity>
         &lt;/View>
+    };
+
+    const handleLeftClick = ()=>{
+        //console.log(currentIndex);
+        currentIndex==0 || setCurrentIndex(currentIndex-1)
+    };
+
+    const handleRightClick = ()=> {
+        //console.log(currentIndex);
+        currentIndex==(Object.keys(advertisementURL).length-1) || setCurrentIndex(currentIndex+1);
     };
 
     const _keyExtractor = (item) => {
@@ -120,11 +167,31 @@ function HomeScreen({ currentView, setcurrentView, currentUser, setcurrentUser }
             nestedScrollEnabled={false}
             showsVerticalScrollIndicator={false}
             style={styles.homeScreen}>
+            { // first check if the advertisement image has been fetched from the database or not 
+            advertisementURL=={} ||
             &lt;View style={styles.marketingArea}>
+                &lt;TouchableOpacity style={{width: "5%"}}
+                onPress={handleLeftClick}>
+                    &lt;View style={{flex: 0.4}}>&lt;/View>
+                    &lt;View style={{flex: 0.6}}>
+                        &lt;Text style={{flex: 1,fontSize: 30, fontWeight: 'bold'}}>{"&lt;"}&lt;/Text>
+                    &lt;/View>
+                &lt;/TouchableOpacity>
                 &lt;Image resizeMode="contain"
                     style={styles.marketingImage}
-                    source={require('./marketing.jpg')} />
+                    source={{ uri : advertisementURL[Object.keys(advertisementURL)[currentIndex]]
+                        // uri : advertisementURL=={} ? require("./marketing.jpg") : advertisementURL[
+                        // Object.keys(advertisementURL)[currentIndex]]
+                    }} />
+                &lt;TouchableOpacity style={{width: "5%"}}
+                onPress={handleRightClick}>
+                    &lt;View style={{flex: 0.4}}>&lt;/View>
+                    &lt;View style={{flex: 0.6}}>
+                        &lt;Text style={{fontSize: 30, fontWeight: 'bold'}}>{">"}&lt;/Text>
+                    &lt;/View>
+                &lt;/TouchableOpacity>
             &lt;/View>
+            }
             &lt;Text
                 style={styles.selectServiceTitle}>
                 Select Service
@@ -151,19 +218,26 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     marketingImage: {
-        width: '100%',
+        width: '90%',
         height: undefined,
-        aspectRatio: 1 / 0.7
+        aspectRatio: 1 / 0.75,
+        alignSelf: 'center'
     },
     marketingArea: {
+        width: '90%',
+        height: undefined,
+        aspectRatio: 1 / 0.7,
         margin: '5%',
-        marginTop: "10%",
-        backgroundColor: '#000000'
+        marginTop: "5%",
+        marginBottom: "2%",
+        display: 'flex',
+        flexDirection: 'row'
     },
     selectServiceTitle: {
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 25,
+        marginTop: 5,
         marginBottom: 10,
         color: keys.colors.MAIN
     },
@@ -181,8 +255,12 @@ const styles = StyleSheet.create({
         justifyContent: "space-evenly"
     },
     serviceImage: {
+        width: undefined,
+        height: '80%',
+        aspectRatio: 1 / 1,
         alignSelf: 'center',
-        margin: '10%'
+        margin: '10%',
+        marginTop: '3%'
     },
     ServiceNameStyle: {
         fontSize: 20,
@@ -201,13 +279,13 @@ export default HomeScreen
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_serviceitem_index.html">Components/serviceitem/index</a></li><li><a href="module-Components_serviceitemtype_index.html">Components/serviceitemtype/index</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-configs_CacheManager.html">configs/CacheManager</a></li><li><a href="module-configs_firebase-init.html">configs/firebase-init</a></li><li><a href="module-configs_KEYS.html">configs/KEYS</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Apr 26 2021 09:59:34 GMT+0530 (India Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

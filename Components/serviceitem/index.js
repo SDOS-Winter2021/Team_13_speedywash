@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import React from 'react';
 import { View, Text, ImageBackground, Pressable, Image, ScrollView, TouchableOpacity } from 'react-native';
 import styles from './styles';
@@ -12,6 +15,10 @@ const transition = (
         <Transition.Out fade='fade' durationMs={200} ></Transition.Out>
     </Transition.Together>
 )
+/**
+ * Responsible Responsuble for redering all items that belong to one category (has multiple rows)
+ * @returns {View} - React Component View
+ */
 const ServiceItem = (props) => {
     const [currentindex, setcurrentindex] = React.useState(null);
     const { list_of_titles, list_of_items, heading, list_of_prices } = props;

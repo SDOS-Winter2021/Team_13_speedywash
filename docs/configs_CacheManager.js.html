@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Components/Auth/FirstAuthScreen.js</title>
+    <title>JSDoc: Source: configs/CacheManager.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Components/Auth/FirstAuthScreen.js</h1>
+    <h1 class="page-title">Source: configs/CacheManager.js</h1>
 
     
 
@@ -29,52 +29,73 @@
             <pre class="prettyprint source linenums"><code>/**
  * @module
  */
-import React from 'react'
-import { FontAwesome, MaterialIcons, AntDesign  } from '@expo/vector-icons';
-import { Text, View, Button, TouchableOpacity } from 'react-native';
-import { Image, StyleSheet } from 'react-native';
-import keys from "../../configs/KEYS";
-import { ceil } from 'react-native-reanimated';
+import AsyncStorage from '@react-native-community/async-storage';
+import keys from "../configs/KEYS"
+
+/**
+ * Promise object hence asynchronous
+ * Returns null either when key is not present or cached value is expired the timeout
+ * @param {string} key - mapping key corresponding to the item required
+ * @returns {Promise} - A promise that contains reference to getter function
+*/
+export function getValue(key) {
+    return new Promise((resolve, reject) => {
+        AsyncStorage.getItem(key).then((value) => {
+            if (value == null)
+                resolve(null);
+            
+            value = JSON.parse(value)
+            
+            
+            if (value.timeout &lt; (new Date()).getTime())
+                resolve(null);
+            else
+                resolve(value.data);
+        }).catch((message) => {
+            reject(message)
+        })
+    })
+}
+
+/**
+ * Make sure key is unique
+ * value must be an object
+ * timeout in milliseconds
+ * @param {string} key - key to which value must be mapped in cache, used in while calling getValue
+ * @param {Object} value - Object to store in cache
+ * @param {number} timeout - after this many milliseconds, this item will expire.
+ * @returns {Promise} - A promise that contains reference to setter function
+*/
+export function setValue(key, value, timeout) {
+    const creationTime = (new Date()).getTime()
+    const expiryTime = creationTime + timeout
+    const newObj = {
+        data: value,
+        timeout: expiryTime
+    }
+    return AsyncStorage.setItem(key, JSON.stringify(newObj))
+}
+
 /**
  * 
- * @param {Object} obj - An object
- * @param {function} obj.setCurrentStage - current stage setter 
- * @returns {View} - React Componnent View
+ * @param {string} key - key to the corresponding item that is needed to be removed form cache 
+ * @returns {Promise} - A promise that contains reference to removal of key function
  */
-function FirstAuthScreen({ setCurrentStage }) {
-    return (
-        &lt;View style={styles.background}>
-            &lt;View style={styles.container}>
-                &lt;Image 
-                style={styles.logo} 
-                source={require("../../assets/logo.png")} />
-            &lt;/View>
-            &lt;View style={{alignSelf: "center", margin: "10%"}}>
-                &lt;Button title="Sign in" onPress={() => setCurrentStage(1)} />
-            &lt;/View>
-        &lt;/View>
-    )
+export function removeValue(key) {
+    return AsyncStorage.removeItem(key);
 }
-const styles = StyleSheet.create({
-    background: {
-        width: "100%",
-        display: "flex",
-        flexDirection: "column"
-    },
-    container : {
-        alignSelf: 'center',
-        marginHorizontal: "10%"
-    },
-    logo : {
-        // width: "50%",
-        // height: undefined,
-        // aspectRatio: 2/1
-        alignSelf: "center",
-        margin: "10%"
+
+/**
+ * Removes all the values from cache that were stored, keys are fetched from keys.storage
+ */
+export function cleanCache()
+{
+    const values = Object.values(keys.storage)
+    for(var i=0;i&lt;values.length;i++)
+    {
+        removeValue(values[i])
     }
-});
-export default FirstAuthScreen
-</code></pre>
+}</code></pre>
         </article>
     </section>
 

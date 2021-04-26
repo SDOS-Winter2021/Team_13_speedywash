@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Components/GenericLayout/GenericLayout</title>
+    <title>JSDoc: Module: Components/serviceitemtype/index</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: Components/GenericLayout/GenericLayout</h1>
+    <h1 class="page-title">Module: Components/serviceitemtype/index</h1>
 
     
 
@@ -64,7 +64,7 @@
     
 
     
-    <h4 class="name" id="~GenericLayout"><span class="type-signature">(inner) </span>GenericLayout<span class="signature">(obj)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~ServiceItemType"><span class="type-signature">(inner) </span>ServiceItemType<span class="signature">(obj)</span><span class="type-signature"> &rarr; {View}</span></h4>
     
 
     
@@ -72,10 +72,7 @@
 
 
 <div class="description">
-    <p>Generic Layout consist of Two main components
-Swtichable View which could be any of the one {HomeScreen, Subscription, Profile}
-Footer can be used to select any of the above view
-change currentView.footer: false in order to hide footer, screen size will adjust automatically</p>
+    <p>Compenent Responsible for rendering a single row in service specific page and add item to cart</p>
 </div>
 
 
@@ -127,7 +124,7 @@ change currentView.footer: false in order to hide footer, screen size will adjus
 
             
 
-            <td class="description last"><p>An object</p>
+            <td class="description last">
                 <h6>Properties</h6>
                 
 
@@ -153,13 +150,13 @@ change currentView.footer: false in order to hide footer, screen size will adjus
 
         <tr>
             
-                <td class="name"><code>currentUser</code></td>
+                <td class="name"><code>type</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="module-globaltypes.html#.User">module:globaltypes.User</a></span>
+<span class="param-type">string</span>
 
 
             
@@ -169,20 +166,20 @@ change currentView.footer: false in order to hide footer, screen size will adjus
 
             
 
-            <td class="description last"><p>current user profile</p></td>
+            <td class="description last"><p>Item name</p></td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>setCurrentUser</code></td>
+                <td class="name"><code>price</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">string</span>
 
 
             
@@ -192,7 +189,76 @@ change currentView.footer: false in order to hide footer, screen size will adjus
 
             
 
-            <td class="description last"><p>current user setter</p></td>
+            <td class="description last"><p>Item price</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>image</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Item display image</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>heading</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Top level service name</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Item category name</p></td>
         </tr>
 
     
@@ -240,265 +306,7 @@ change currentView.footer: false in order to hide footer, screen size will adjus
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Components_GenericLayout_GenericLayout.js.html">Components/GenericLayout/GenericLayout.js</a>, <a href="Components_GenericLayout_GenericLayout.js.html#line61">line 61</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="~SwitchView"><span class="type-signature">(inner) </span>SwitchView<span class="signature">(obj)</span><span class="type-signature"> &rarr; {View}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    <p>This is the stage selecter function
-Add new switchable screen here, name of screens are stored in KEYS.js
-Redirecting to correct sub-screen is responsibility of that screen itself
-All the sub-screens (nested screens) should be handled there it self example: all screens that are nested below homepage should be present in Homepage directory</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>An object</p>
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>currentUser</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-globaltypes.html#.User">module:globaltypes.User</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>current user profile</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>setCurrentUser</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>current user setter</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>currentView</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-globaltypes.html#.VisibleView">module:globaltypes.VisibleView</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>current visible/selected view</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>setcurrentView</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>current view setter</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Components_GenericLayout_GenericLayout.js.html">Components/GenericLayout/GenericLayout.js</a>, <a href="Components_GenericLayout_GenericLayout.js.html#line31">line 31</a>
+        <a href="Components_serviceitemtype_index.js.html">Components/serviceitemtype/index.js</a>, <a href="Components_serviceitemtype_index.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -528,7 +336,7 @@ All the sub-screens (nested screens) should be handled there it self example: al
         
 <div class="param-desc">
     <ul>
-<li>React Component View</li>
+<li>A react Component view</li>
 </ul>
 </div>
 

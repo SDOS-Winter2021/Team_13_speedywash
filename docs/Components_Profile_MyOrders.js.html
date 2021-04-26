@@ -38,6 +38,7 @@ import { Image, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native';
+import { set } from 'react-native-reanimated';
 
 /**
  * Show user their current order and past order, for current order allows them to see amount to be paid, 
@@ -53,8 +54,8 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
     const [incompleteOrders, setIncompleteOrders] = useState({});
     const [completedOrders, setCompletedOrders] = useState({});
     const [selectedOrder, setSelectedOrder] = useState(null);
-    const [incompleteOrdersList, setIncompleteOrdersList] = useState(null);
-    const [completedOrdersList, setCompletedOrdersList] = useState(null);
+    const [incompleteOrdersList, setIncompleteOrdersList] = useState([]);
+    const [completedOrdersList, setCompletedOrdersList] = useState([]);
     const [Order, setOrder] = useState({});
 
     useEffect(() => {
@@ -63,11 +64,27 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
             //console.log(record.data());
             if (record &amp;&amp; record.data()) {
                 //console.log(Object.keys(record.data()));
-                setIncompleteOrders(record.data());
-                setIncompleteOrdersList(Object.keys(record.data()));
+                let all_orders = record.data();
+                let incomplete = {};
+                let complete = {};
+                Object.keys(all_orders).map((item)=>{
+                    if(all_orders[item].orderStatus.stage ==4)
+                    {
+                        complete = {...complete,
+                                    [item] : all_orders[item] };
+                    }
+                    else
+                    {
+                        incomplete = {...incomplete,
+                            [item] : all_orders[item]};
+                        //console.log(item);
+                    }
+                });
+                setCompletedOrders(complete);
+                setIncompleteOrders(incomplete);
+                setIncompleteOrdersList(Object.keys(incomplete));
                 // BELOW 2 LINES ARE ONLY FOR TWO TESTING PURPOSES. BE SURE TO COMMENT THEM FOR CORRECT WORKING
-                setCompletedOrders(record.data());
-                setCompletedOrdersList(Object.keys(record.data()));
+                setCompletedOrdersList(Object.keys(complete));
             }
         })
     }, [])
@@ -99,10 +116,11 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         
         const temp = {...incompleteOrders};
         delete temp[item];
+        const temp2 = {...temp, ...completedOrders};
+        firebase.firestore()
+        .collection("incompleteOrders").doc(currentUser.uid).set(temp2);
         setIncompleteOrdersList(Object.keys(temp));
         setIncompleteOrders(temp);
-        firebase.firestore()
-        .collection("incompleteOrders").doc(currentUser.uid).set(temp);
     };
 
     const onClickCancel = (item) => {
@@ -129,7 +147,7 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         // const item=element.item;
         
         // return &lt;View>&lt;Text>djhf&lt;/Text>&lt;Button title="kdjf" onPress={()=>{onClickCancel(item)}}>&lt;/Button>&lt;/View>
-        pickupDate = incompleteOrders[item]["pickUpDate"].toDate();
+        const pickupDate = incompleteOrders[item]["pickUpDate"].toDate();
         return &lt;View style={styles.outerBox} key={item}> 
 
             &lt;View style={{flexDirection: "row"}}>
@@ -171,7 +189,7 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         // const item=element.item;
         
         // return &lt;View>&lt;Text>djhf&lt;/Text>&lt;Button title="kdjf" onPress={()=>{onClickCancel(item)}}>&lt;/Button>&lt;/View>
-        pickupDate = completedOrders[item]["pickUpDate"].toDate();
+        const pickupDate = completedOrders[item]["pickUpDate"].toDate();
         // Uncomment below line when database is updated with drop dates
         // dropDate = completedOrders[item]["dropDate"].toDate();
         return &lt;View style={styles.outerBox} key={item}> 
@@ -211,11 +229,11 @@ function MyOrders({ currentUser, setcurrentUser, setcurrentView }) {
         style={styles.wholePage}>
         &lt;TopBar>&lt;/TopBar>
         {
-            incompleteOrdersList==null ||
+            incompleteOrdersList==[] ||
             (orderType==0 &amp;&amp; incompleteOrdersList.map(_renderIncompleteItem))
         }
         {
-            completedOrdersList==null ||
+            completedOrdersList==[] ||
             (orderType==1 &amp;&amp; completedOrdersList.map(_renderCompletedItem))
         }
     &lt;/ScrollView>
@@ -338,13 +356,13 @@ export default MyOrders</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Notification_Notification.html">Components/Notification/Notification</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Components_Auth_CreateUser.html">Components/Auth/CreateUser</a></li><li><a href="module-Components_Auth_FirstAuthScreen.html">Components/Auth/FirstAuthScreen</a></li><li><a href="module-Components_Auth_SignInScreen.html">Components/Auth/SignInScreen</a></li><li><a href="module-Components_Cart_Cart.html">Components/Cart/Cart</a></li><li><a href="module-Components_CurrentLocationPicker_CurrentLocationPicker.html">Components/CurrentLocationPicker/CurrentLocationPicker</a></li><li><a href="module-Components_Footer_Footer.html">Components/Footer/Footer</a></li><li><a href="module-Components_GenericLayout_GenericLayout.html">Components/GenericLayout/GenericLayout</a></li><li><a href="module-Components_Header_Header.html">Components/Header/Header</a></li><li><a href="module-Components_HomeScreen_HomeScreen.html">Components/HomeScreen/HomeScreen</a></li><li><a href="module-Components_Profile_AddAddress.html">Components/Profile/AddAddress</a></li><li><a href="module-Components_Profile_EditProfile.html">Components/Profile/EditProfile</a></li><li><a href="module-Components_Profile_ManageAddress.html">Components/Profile/ManageAddress</a></li><li><a href="module-Components_Profile_MyOrders.html">Components/Profile/MyOrders</a></li><li><a href="module-Components_Profile_Profile.html">Components/Profile/Profile</a></li><li><a href="module-Components_SchedulePickup_SchedulePickup.html">Components/SchedulePickup/SchedulePickup</a></li><li><a href="module-Components_serviceitem_index.html">Components/serviceitem/index</a></li><li><a href="module-Components_serviceitemtype_index.html">Components/serviceitemtype/index</a></li><li><a href="module-Components_ServiceSpecific_ServiceSpecific.html">Components/ServiceSpecific/ServiceSpecific</a></li><li><a href="module-configs_CacheManager.html">configs/CacheManager</a></li><li><a href="module-configs_firebase-init.html">configs/firebase-init</a></li><li><a href="module-configs_KEYS.html">configs/KEYS</a></li><li><a href="module-globaltypes.html">globaltypes</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Sat Apr 17 2021 14:09:30 GMT+0530 (India Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Apr 26 2021 09:59:34 GMT+0530 (India Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
