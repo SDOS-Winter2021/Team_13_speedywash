@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Components/Auth/FirstAuthScreen.js</title>
+    <title>JSDoc: Source: Components/serviceitem/index.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Components/Auth/FirstAuthScreen.js</h1>
+    <h1 class="page-title">Source: Components/serviceitem/index.js</h1>
 
     
 
@@ -29,52 +29,57 @@
             <pre class="prettyprint source linenums"><code>/**
  * @module
  */
-import React from 'react'
-import { FontAwesome, MaterialIcons, AntDesign  } from '@expo/vector-icons';
-import { Text, View, Button, TouchableOpacity } from 'react-native';
-import { Image, StyleSheet } from 'react-native';
-import keys from "../../configs/KEYS";
-import { ceil } from 'react-native-reanimated';
+import React from 'react';
+import { View, Text, ImageBackground, Pressable, Image, ScrollView, TouchableOpacity } from 'react-native';
+import styles from './styles';
+import ServiceItemType from '../serviceitemtype';
+import { Transition, Transitioning } from 'react-native-reanimated';
+import { TouchableHighlight } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native';
+const transition = (
+    &lt;Transition.Together>
+        &lt;Transition.In fade='fade' durationMs={200}>&lt;/Transition.In>
+        &lt;Transition.Change>&lt;/Transition.Change>
+        &lt;Transition.Out fade='fade' durationMs={200} >&lt;/Transition.Out>
+    &lt;/Transition.Together>
+)
 /**
- * 
- * @param {Object} obj - An object
- * @param {function} obj.setCurrentStage - current stage setter 
- * @returns {View} - React Componnent View
+ * Responsible Responsuble for redering all items that belong to one category (has multiple rows)
+ * @returns {View} - React Component View
  */
-function FirstAuthScreen({ setCurrentStage }) {
+const ServiceItem = (props) => {
+    const [currentindex, setcurrentindex] = React.useState(null);
+    const { list_of_titles, list_of_items, heading, list_of_prices } = props;
+    const cartItemsAndPriceUpdater = props.cartItemsAndPriceUpdater;
+    const ref = React.useRef();
     return (
-        &lt;View style={styles.background}>
-            &lt;View style={styles.container}>
-                &lt;Image 
-                style={styles.logo} 
-                source={require("../../assets/logo.png")} />
-            &lt;/View>
-            &lt;View style={{alignSelf: "center", margin: "10%"}}>
-                &lt;Button title="Sign in" onPress={() => setCurrentStage(1)} />
-            &lt;/View>
-        &lt;/View>
-    )
-}
-const styles = StyleSheet.create({
-    background: {
-        width: "100%",
-        display: "flex",
-        flexDirection: "column"
-    },
-    container : {
-        alignSelf: 'center',
-        marginHorizontal: "10%"
-    },
-    logo : {
-        // width: "50%",
-        // height: undefined,
-        // aspectRatio: 2/1
-        alignSelf: "center",
-        margin: "10%"
-    }
-});
-export default FirstAuthScreen
-</code></pre>
+        &lt;Transitioning.View ref={ref} transition={transition} style={styles.bigcontainer}>
+            &lt;ScrollView style={styles.bigcontainer} >
+
+                &lt;View style={styles.headingbox}>&lt;Text style={styles.heading}>{heading}&lt;/Text>&lt;/View>
+
+
+                {list_of_titles.map((item, key) => (&lt;View key={key} style={styles.allitems}>
+
+                    &lt;View>
+                        &lt;TouchableOpacity key={key} onPress={() => { setcurrentindex(key === currentindex ? null : key) }}>
+                            &lt;View style={styles.textbox}>&lt;Text style={styles.text}>{item}&lt;/Text>&lt;/View>
+                        &lt;/TouchableOpacity>
+                        {key === currentindex &amp;&amp; &lt;View style={styles.items}>
+                            {list_of_items[key].map((item1, key1) => (&lt;View key={key1} style={styles.itembox}>
+
+                                &lt;ServiceItemType cartItemsAndPriceUpdater={cartItemsAndPriceUpdater} heading={heading} title={item} type={item1} price={list_of_prices[key][key1]}>&lt;/ServiceItemType>
+                            &lt;/View>))}
+                        &lt;/View>}
+                    &lt;/View>
+                &lt;/View>))}
+
+            &lt;/ScrollView>
+        &lt;/Transitioning.View>
+    );
+};
+
+export default ServiceItem;</code></pre>
         </article>
     </section>
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: Components/GenericLayout/GenericLayout</title>
+    <title>JSDoc: Module: configs/CacheManager</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: Components/GenericLayout/GenericLayout</h1>
+    <h1 class="page-title">Module: configs/CacheManager</h1>
 
     
 
@@ -64,7 +64,7 @@
     
 
     
-    <h4 class="name" id="~GenericLayout"><span class="type-signature">(inner) </span>GenericLayout<span class="signature">(obj)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".cleanCache"><span class="type-signature">(static) </span>cleanCache<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -72,10 +72,7 @@
 
 
 <div class="description">
-    <p>Generic Layout consist of Two main components
-Swtichable View which could be any of the one {HomeScreen, Subscription, Profile}
-Footer can be used to select any of the above view
-change currentView.footer: false in order to hide footer, screen size will adjust automatically</p>
+    <p>Removes all the values from cache that were stored, keys are fetched from keys.storage</p>
 </div>
 
 
@@ -84,127 +81,6 @@ change currentView.footer: false in order to hide footer, screen size will adjus
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>obj</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>An object</p>
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>currentUser</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-globaltypes.html#.User">module:globaltypes.User</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>current user profile</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>setCurrentUser</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>current user setter</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -240,7 +116,7 @@ change currentView.footer: false in order to hide footer, screen size will adjus
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Components_GenericLayout_GenericLayout.js.html">Components/GenericLayout/GenericLayout.js</a>, <a href="Components_GenericLayout_GenericLayout.js.html#line61">line 61</a>
+        <a href="configs_CacheManager.js.html">configs/CacheManager.js</a>, <a href="configs_CacheManager.js.html#line63">line 63</a>
     </li></ul></dd>
     
 
@@ -276,7 +152,7 @@ change currentView.footer: false in order to hide footer, screen size will adjus
     
 
     
-    <h4 class="name" id="~SwitchView"><span class="type-signature">(inner) </span>SwitchView<span class="signature">(obj)</span><span class="type-signature"> &rarr; {View}</span></h4>
+    <h4 class="name" id=".getValue"><span class="type-signature">(static) </span>getValue<span class="signature">(key)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
     
 
     
@@ -284,10 +160,8 @@ change currentView.footer: false in order to hide footer, screen size will adjus
 
 
 <div class="description">
-    <p>This is the stage selecter function
-Add new switchable screen here, name of screens are stored in KEYS.js
-Redirecting to correct sub-screen is responsibility of that screen itself
-All the sub-screens (nested screens) should be handled there it self example: all screens that are nested below homepage should be present in Homepage directory</p>
+    <p>Promise object hence asynchronous
+Returns null either when key is not present or cached value is expired the timeout</p>
 </div>
 
 
@@ -323,13 +197,13 @@ All the sub-screens (nested screens) should be handled there it self example: al
 
         <tr>
             
-                <td class="name"><code>obj</code></td>
+                <td class="name"><code>key</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Object</span>
+<span class="param-type">string</span>
 
 
             
@@ -339,125 +213,7 @@ All the sub-screens (nested screens) should be handled there it self example: al
 
             
 
-            <td class="description last"><p>An object</p>
-                <h6>Properties</h6>
-                
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>currentUser</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-globaltypes.html#.User">module:globaltypes.User</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>current user profile</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>setCurrentUser</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>current user setter</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>currentView</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="module-globaltypes.html#.VisibleView">module:globaltypes.VisibleView</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>current visible/selected view</p></td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>setcurrentView</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>current view setter</p></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-            </td>
+            <td class="description last"><p>mapping key corresponding to the item required</p></td>
         </tr>
 
     
@@ -498,7 +254,7 @@ All the sub-screens (nested screens) should be handled there it self example: al
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Components_GenericLayout_GenericLayout.js.html">Components/GenericLayout/GenericLayout.js</a>, <a href="Components_GenericLayout_GenericLayout.js.html#line31">line 31</a>
+        <a href="configs_CacheManager.js.html">configs/CacheManager.js</a>, <a href="configs_CacheManager.js.html#line13">line 13</a>
     </li></ul></dd>
     
 
@@ -528,7 +284,7 @@ All the sub-screens (nested screens) should be handled there it self example: al
         
 <div class="param-desc">
     <ul>
-<li>React Component View</li>
+<li>A promise that contains reference to getter function</li>
 </ul>
 </div>
 
@@ -540,7 +296,373 @@ All the sub-screens (nested screens) should be handled there it self example: al
     </dt>
     <dd>
         
-<span class="param-type">View</span>
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".removeValue"><span class="type-signature">(static) </span>removeValue<span class="signature">(key)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>key to the corresponding item that is needed to be removed form cache</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="configs_CacheManager.js.html">configs/CacheManager.js</a>, <a href="configs_CacheManager.js.html#line56">line 56</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>A promise that contains reference to removal of key function</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".setValue"><span class="type-signature">(static) </span>setValue<span class="signature">(key, value, timeout)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Make sure key is unique
+value must be an object
+timeout in milliseconds</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>key to which value must be mapped in cache, used in while calling getValue</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Object to store in cache</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timeout</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>after this many milliseconds, this item will expire.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="configs_CacheManager.js.html">configs/CacheManager.js</a>, <a href="configs_CacheManager.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <ul>
+<li>A promise that contains reference to setter function</li>
+</ul>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
 
 
     </dd>

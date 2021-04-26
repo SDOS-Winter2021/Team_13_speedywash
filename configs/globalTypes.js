@@ -60,3 +60,14 @@
  * @property {Object} orderStatus - orderstatus object,
  * @property {string} oid - order id hash of concatenated uid and orderTimeString
 */
+
+/**
+ * Global Property Object
+ * @typedef module:globaltypes.Keys
+ * @type {Object}
+ * @property {Object} storage - contains mapping of keys to string that are used in local cache
+ * @property {Object} screens - contains mapping of keys to string that are used in screen names
+ * @property {Object} colors - contains mapping of keys to color string that are used in application
+ * @property {Object} orderStatus - contains mapping of keys to Object that are used while placing order
+ * @property {Object} time - contains time in milliseconds
+ */

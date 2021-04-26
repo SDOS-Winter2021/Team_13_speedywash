@@ -1,3 +1,6 @@
+/**
+ * @module
+ */
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
@@ -9,11 +12,13 @@ import 'firebase/firestore';
 import keys, { data } from "./configs/KEYS"
 import GenericLayout from './Components/GenericLayout/GenericLayout';
 
-/*
-	* Looks for user if present in localstorage then updates the current user value
-	* When user logs out this item is removed from local storage as well as firebase
-	* if user returned is null then it implies user hasn't logged in therefore redirected to sign in screen
-	* When user logs in it's one instance is also created in local storage as well. 
+/**
+ * Looks for user if present in localstorage then updates the current user value
+ * When user logs out this item is removed from local storage as well as firebase
+ * if user returned is null then it implies user hasn't logged in therefore redirected to sign in screen
+ * When user logs in it's one instance is also created in local storage as well. 
+ * @param {function} setcurrentUser - setter current user
+ * @returns {void} - Nothing
 */
 function UpdateCurrentUser(setcurrentUser) {
 	AsyncStorage.getItem(keys.storage.USER).then(value => {
@@ -22,10 +27,9 @@ function UpdateCurrentUser(setcurrentUser) {
 	});
 }
 
-/*
-	* Main App function consist of two states
-	* Unauthorized: in that case redirected to authentication screen/ Signinscreen
-	* Authroized: In that case redirected to home screen
+/** 
+ * Main App function consist of two statesUnauthorized: in that case redirected to authentication screen/ SigninscreenAuthroized: In that case redirected to home screen
+ * @returns {View} - React Componnent View
 */
 export default function App() {
 	const [currentUser, setcurrentUser] = useState(null);

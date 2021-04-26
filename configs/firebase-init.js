@@ -1,5 +1,11 @@
+/**
+ * @module
+ */
 import * as firebase from 'firebase';
 
+/**
+ * First file that is called in order initialize firebase
+ */
 var firebaseConfig = {
     apiKey: "AIzaSyAxl-nPQvRB02LCVPRgSMwX3eoCqbhysBY",
     authDomain: "speedywash-7d67a.firebaseapp.com",
@@ -9,5 +15,4 @@ var firebaseConfig = {
     appId: "1:15998946049:web:2618c353d0ffac9fafa900",
     measurementId: "G-WTW4XB5B7B"
 };
-  // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
