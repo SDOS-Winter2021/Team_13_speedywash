@@ -5,3 +5,5 @@ Instruction to run the app:
 2. In the directory of repository, open the command prompt.
 3. Type "npm install".
 4. Type "expo start".
+
+Note: Run the following command to run the test suites in the mobile application: “npm test”
